@@ -1,7 +1,7 @@
 # PAT-001 — Domain Fit
 
 ## Status
-**Validated Design Gap** — promotion threshold met; engineering change queued pending RA-1 Summary completion
+**Validated Design Gap with bounded impact** — promotion threshold met; engineering change queued pending RA-1 Summary completion
 
 ## Definition
 
@@ -104,6 +104,23 @@ The bidder's completed work portfolio is in a different sector than the tender r
 The tender requires a formal authorization relationship between the bidder and a third party (manufacturer, OEM, regulator). No threshold value exists to extract; the requirement is structural and non-numeric.
 - Examples: OEM authorization, dealer certification, manufacturer approval, empanelment.
 - Observations: Tender002 (Otis OEM certificate).
+
+## Evidence Dimensions
+
+Every observation in this pattern is now classified on two axes:
+
+| Dimension | Question |
+|---|---|
+| **Output** | Did engine and human reach the same recommendation? |
+| **Logic** | Did the engine reason correctly — i.e., was domain compatibility evaluated before thresholds? |
+
+Possible states for any tender:
+- **Logic failure + Output failure** — engine ignores domain, recommends BID, human says NO BID / REVIEW (Tender001–004)
+- **Logic failure + Correct output** — engine ignores domain, but recommendation happens to be correct (Tender005 — domain matched, both said BID, but via incomplete extraction not domain-aware logic)
+- **Correct logic + Output failure** — engine evaluates domain, still wrong (not yet observed; would be a new failure class in OFE logic)
+- **Correct logic + Correct output** — a genuine logic-level counterexample (not yet observed)
+
+PAT-001 remains a design gap because all failure observations are "Logic failure + Output failure" and the single counterexample is "Logic failure + Correct output." The logic failure is universal across all five tenders.
 
 ## Notes
 
