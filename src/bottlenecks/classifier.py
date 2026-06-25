@@ -73,7 +73,8 @@ class BottleneckClassifier:
 
         # Evidence gaps on passing requirements
         passing_with_gaps = [
-            r for r in eligibility_result.requirement_results
+            r
+            for r in eligibility_result.requirement_results
             if r.status == RequirementStatus.PASS and not r.evidence_available
         ]
         if passing_with_gaps:
@@ -81,7 +82,8 @@ class BottleneckClassifier:
 
         # Partials indicate uncertainty
         partial_results = [
-            r for r in eligibility_result.requirement_results
+            r
+            for r in eligibility_result.requirement_results
             if r.status == RequirementStatus.PARTIAL
         ]
         if partial_results:
@@ -93,9 +95,15 @@ class BottleneckClassifier:
 
         # Multiple hard disqualifiers
         hard_disqualifiers = [
-            c for c in classifications
-            if c in {"financial_threshold_not_met", "certification_missing",
-                     "experience_threshold_not_met", "net_worth_insufficient"}
+            c
+            for c in classifications
+            if c
+            in {
+                "financial_threshold_not_met",
+                "certification_missing",
+                "experience_threshold_not_met",
+                "net_worth_insufficient",
+            }
         ]
         if len(hard_disqualifiers) > 1:
             classifications.insert(0, "multiple_disqualifiers")

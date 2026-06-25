@@ -1,10 +1,9 @@
 """Evidence store — persists and retrieves evidence items."""
 
-import json
 from pathlib import Path
 
 from src.utils.config import get_config
-from src.utils.helpers import ensure_dir, generate_id, now_iso, save_json, load_json
+from src.utils.helpers import ensure_dir, generate_id, load_json, save_json
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)

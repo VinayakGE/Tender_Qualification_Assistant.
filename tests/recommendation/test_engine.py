@@ -1,7 +1,5 @@
 """Tests for the recommendation engine decision tree."""
 
-import pytest
-
 from src.qualification.eligibility import EligibilityResult, RequirementResult, RequirementStatus
 from src.recommendation.engine import RecommendationEngine
 
@@ -211,6 +209,7 @@ class TestRecommendationEngineBranches:
     def test_to_dict_serializable(self, all_pass_eligibility_result):
         """to_dict() returns a JSON-serializable dictionary."""
         import json
+
         engine = RecommendationEngine()
         rec = engine.recommend(
             eligibility_result=all_pass_eligibility_result,

@@ -6,7 +6,7 @@ from pathlib import Path
 
 from src.recommendation.engine import Recommendation
 from src.utils.config import get_config
-from src.utils.helpers import ensure_dir, now_iso
+from src.utils.helpers import ensure_dir
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)

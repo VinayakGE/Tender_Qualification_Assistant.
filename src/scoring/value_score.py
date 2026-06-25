@@ -13,8 +13,8 @@ STRATEGIC_FIT_WEIGHT = 30
 WIN_PROBABILITY_WEIGHT = 35
 
 # Contract value normalization range (in INR)
-MIN_CONTRACT_INR = 100_000       # ₹1 Lakh
-MAX_CONTRACT_INR = 1_000_000_000 # ₹100 Crore
+MIN_CONTRACT_INR = 100_000  # ₹1 Lakh
+MAX_CONTRACT_INR = 1_000_000_000  # ₹100 Crore
 
 
 class ValueScorer:
@@ -85,9 +85,7 @@ class ValueScorer:
         normalized = (log_val - log_min) / (log_max - log_min)
         return clamp(normalized * 100, 0, 100)
 
-    def _strategic_fit_component(
-        self, company_profile: dict, tender_sector: str | None
-    ) -> float:
+    def _strategic_fit_component(self, company_profile: dict, tender_sector: str | None) -> float:
         """Score strategic fit based on priority sectors."""
         if not tender_sector:
             return 50.0
@@ -101,8 +99,7 @@ class ValueScorer:
 
         # Check completed project sectors as a proxy for capability
         project_sectors = [
-            (p.get("sector") or "").lower()
-            for p in company_profile.get("completed_projects", [])
+            (p.get("sector") or "").lower() for p in company_profile.get("completed_projects", [])
         ]
         if any(tender_lower in s or s in tender_lower for s in project_sectors):
             return 60.0

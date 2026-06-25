@@ -54,23 +54,18 @@ class ConfidenceEstimator:
 
         # Component 1: Data completeness (0 - 0.25)
         definitive = sum(
-            1 for r in results
-            if r.status in (RequirementStatus.PASS, RequirementStatus.FAIL)
+            1 for r in results if r.status in (RequirementStatus.PASS, RequirementStatus.FAIL)
         )
         partial_results = [
-            r for r in results
-            if r.status not in (RequirementStatus.PASS, RequirementStatus.FAIL)
+            r for r in results if r.status not in (RequirementStatus.PASS, RequirementStatus.FAIL)
         ]
         completeness = definitive / len(results)
         completeness_component = completeness * 0.25
 
         mandatory_verified = sum(
-            1 for r in mandatory
-            if r.status in (RequirementStatus.PASS, RequirementStatus.FAIL)
+            1 for r in mandatory if r.status in (RequirementStatus.PASS, RequirementStatus.FAIL)
         )
-        reasons.append(
-            f"{mandatory_verified} of {len(mandatory)} mandatory requirements verified"
-        )
+        reasons.append(f"{mandatory_verified} of {len(mandatory)} mandatory requirements verified")
         for r in partial_results[:2]:
             reasons.append(f"{r.description[:60].rstrip()} — status could not be determined")
 

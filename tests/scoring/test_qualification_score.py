@@ -1,7 +1,5 @@
 """Tests for qualification score computation."""
 
-import pytest
-
 from src.qualification.eligibility import EligibilityResult, RequirementResult, RequirementStatus
 from src.scoring.qualification_score import QualificationScorer
 
@@ -21,14 +19,22 @@ def make_result(req_id: str, is_mandatory: bool, status: RequirementStatus) -> R
 
 def make_eligibility(results: list[RequirementResult]) -> EligibilityResult:
     """Helper to build an EligibilityResult from a list of results."""
-    mandatory_fails = sum(1 for r in results if r.is_mandatory and r.status == RequirementStatus.FAIL)
+    mandatory_fails = sum(
+        1 for r in results if r.is_mandatory and r.status == RequirementStatus.FAIL
+    )
     return EligibilityResult(
         overall_pass=(mandatory_fails == 0),
         requirement_results=results,
         mandatory_fail_count=mandatory_fails,
-        mandatory_pass_count=sum(1 for r in results if r.is_mandatory and r.status == RequirementStatus.PASS),
-        optional_fail_count=sum(1 for r in results if not r.is_mandatory and r.status == RequirementStatus.FAIL),
-        optional_pass_count=sum(1 for r in results if not r.is_mandatory and r.status == RequirementStatus.PASS),
+        mandatory_pass_count=sum(
+            1 for r in results if r.is_mandatory and r.status == RequirementStatus.PASS
+        ),
+        optional_fail_count=sum(
+            1 for r in results if not r.is_mandatory and r.status == RequirementStatus.FAIL
+        ),
+        optional_pass_count=sum(
+            1 for r in results if not r.is_mandatory and r.status == RequirementStatus.PASS
+        ),
     )
 
 

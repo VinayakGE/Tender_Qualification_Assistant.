@@ -97,7 +97,9 @@ class TurnoverChecker:
             status=RequirementStatus.PASS if passes else RequirementStatus.FAIL,
             evidence_available=evidence_available,
             evidence_description=check_description,
-            notes=f"Gap: ₹{threshold_inr_crores - company_value:.1f} Cr short" if not passes else "",
+            notes=f"Gap: ₹{threshold_inr_crores - company_value:.1f} Cr short"
+            if not passes
+            else "",
         )
 
     def _normalize_to_crores(self, value: float, unit: str | None) -> float:

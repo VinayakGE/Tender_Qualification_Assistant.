@@ -1,12 +1,11 @@
 """Core recommendation engine — implements the decision tree from docs/recommendation-engine.md."""
 
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from dataclasses import dataclass
 
 from src.bottlenecks.classifier import BottleneckClassifier
 from src.bottlenecks.evidence_gap import EvidenceGapDetector
 from src.bottlenecks.reasoning import ReasoningBuilder
-from src.qualification.eligibility import EligibilityResult, RequirementStatus
+from src.qualification.eligibility import EligibilityResult
 from src.recommendation.confidence import ConfidenceEstimator
 from src.scoring.qualification_score import QualificationScorer
 from src.utils.config import get_config

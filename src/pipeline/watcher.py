@@ -55,7 +55,7 @@ class TenderDropHandler(FileSystemEventHandler):
                 "watcher_no_profile_found",
                 pdf_path=str(pdf_path),
                 message="Skipping — no matching company profile. "
-                        "Create data/company-profiles/<stem>_profile.json or default_profile.json",
+                "Create data/company-profiles/<stem>_profile.json or default_profile.json",
             )
             return
 

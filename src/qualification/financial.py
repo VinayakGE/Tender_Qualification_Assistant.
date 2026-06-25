@@ -63,7 +63,9 @@ class FinancialChecker:
                 evidence_description="Net worth not provided in company profile",
             )
 
-        threshold = self._normalize_to_crores(requirement.threshold_value, requirement.threshold_unit)
+        threshold = self._normalize_to_crores(
+            requirement.threshold_value, requirement.threshold_unit
+        )
 
         if threshold is None:
             return RequirementResult(
@@ -77,9 +79,7 @@ class FinancialChecker:
             )
 
         passes = net_worth >= threshold
-        description = (
-            f"Net worth: ₹{net_worth:.1f} Cr vs threshold ₹{threshold:.1f} Cr"
-        )
+        description = f"Net worth: ₹{net_worth:.1f} Cr vs threshold ₹{threshold:.1f} Cr"
 
         logger.debug(
             "financial_net_worth_check",
@@ -119,7 +119,9 @@ class FinancialChecker:
                 evidence_description="Working capital not provided in company profile",
             )
 
-        threshold = self._normalize_to_crores(requirement.threshold_value, requirement.threshold_unit)
+        threshold = self._normalize_to_crores(
+            requirement.threshold_value, requirement.threshold_unit
+        )
 
         if threshold is None:
             return RequirementResult(

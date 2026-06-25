@@ -7,10 +7,9 @@ heuristic extraction when running without a key (Milestone 0 / offline mode).
 import json
 import re
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Literal
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, field_validator
 
 from src.utils.config import get_config
 from src.utils.helpers import generate_id, truncate_text
@@ -47,9 +46,7 @@ _NETWORTH_RE = re.compile(
     re.IGNORECASE | re.DOTALL,
 )
 _ISO_RE = re.compile(r"\bISO\s+(\d{4}(?:[-:]\d{4})?)\b", re.IGNORECASE)
-_CLAUSE_RE = re.compile(
-    r"(?:Section|Clause|Para)\s+(\d+(?:\.\d+)*)", re.IGNORECASE
-)
+_CLAUSE_RE = re.compile(r"(?:Section|Clause|Para)\s+(\d+(?:\.\d+)*)", re.IGNORECASE)
 
 
 class Requirement(BaseModel):
@@ -109,6 +106,7 @@ class RequirementExtractor:
     def _get_client(self):
         if self._client is None:
             import anthropic
+
             self._client = anthropic.Anthropic(api_key=self.config.ANTHROPIC_API_KEY)
         return self._client
 
@@ -305,25 +303,27 @@ class RequirementExtractor:
             return val
 
         def _find_clause(pos: int) -> str | None:
-            snippet = text[max(0, pos - 200):pos]
+            snippet = text[max(0, pos - 200) : pos]
             m = _CLAUSE_RE.search(snippet)
             return m.group(0) if m else None
 
         # --- Turnover ---
         for m in _TURNOVER_RE.finditer(text):
             val = _crore_value(m.group(1), m.group(2))
-            requirements.append(Requirement(
-                requirement_id=generate_id("req"),
-                category="turnover",
-                description=f"Average Annual Turnover not less than Rs. {val:.1f} Crore "
-                            f"(last 3 financial years)",
-                threshold_value=val,
-                threshold_unit="INR_crores_annual_average",
-                threshold_period_years=3,
-                is_mandatory=True,
-                source_clause=_find_clause(m.start()),
-                raw_text=m.group(0),
-            ))
+            requirements.append(
+                Requirement(
+                    requirement_id=generate_id("req"),
+                    category="turnover",
+                    description=f"Average Annual Turnover not less than Rs. {val:.1f} Crore "
+                    f"(last 3 financial years)",
+                    threshold_value=val,
+                    threshold_unit="INR_crores_annual_average",
+                    threshold_period_years=3,
+                    is_mandatory=True,
+                    source_clause=_find_clause(m.start()),
+                    raw_text=m.group(0),
+                )
+            )
 
         # --- Experience (project count + value) ---
         exp_matches = list(_EXPERIENCE_RE.finditer(text))
@@ -334,20 +334,21 @@ class RequirementExtractor:
             proj_val = None
             if val_matches:
                 proj_val = _crore_value(val_matches[0].group(1), val_matches[0].group(2))
-            desc = (
-                f"Successfully completed at least {count} similar works"
-                + (f", each of value not less than Rs. {proj_val:.1f} Crore" if proj_val else "")
+            desc = f"Successfully completed at least {count} similar works" + (
+                f", each of value not less than Rs. {proj_val:.1f} Crore" if proj_val else ""
             )
-            requirements.append(Requirement(
-                requirement_id=generate_id("req"),
-                category="experience",
-                description=desc,
-                threshold_value=proj_val,
-                threshold_unit="INR_crores_per_project" if proj_val else None,
-                is_mandatory=True,
-                source_clause=_find_clause(exp_matches[0].start()),
-                raw_text=exp_matches[0].group(0),
-            ))
+            requirements.append(
+                Requirement(
+                    requirement_id=generate_id("req"),
+                    category="experience",
+                    description=desc,
+                    threshold_value=proj_val,
+                    threshold_unit="INR_crores_per_project" if proj_val else None,
+                    is_mandatory=True,
+                    source_clause=_find_clause(exp_matches[0].start()),
+                    raw_text=exp_matches[0].group(0),
+                )
+            )
 
         # --- ISO Certifications ---
         seen_certs: set[str] = set()
@@ -356,17 +357,19 @@ class RequirementExtractor:
             if cert in seen_certs:
                 continue
             seen_certs.add(cert)
-            requirements.append(Requirement(
-                requirement_id=generate_id("req"),
-                category="certification",
-                description=f"Valid {cert} certification required",
-                threshold_value=None,
-                threshold_unit=None,
-                is_mandatory=True,
-                source_clause=_find_clause(m.start()),
-                certification_name=cert,
-                raw_text=m.group(0),
-            ))
+            requirements.append(
+                Requirement(
+                    requirement_id=generate_id("req"),
+                    category="certification",
+                    description=f"Valid {cert} certification required",
+                    threshold_value=None,
+                    threshold_unit=None,
+                    is_mandatory=True,
+                    source_clause=_find_clause(m.start()),
+                    certification_name=cert,
+                    raw_text=m.group(0),
+                )
+            )
 
         # --- Net Worth ---
         for m in _NETWORTH_RE.finditer(text):
@@ -375,16 +378,18 @@ class RequirementExtractor:
             if not val_str:
                 continue
             val = _crore_value(val_str, unit_str)
-            requirements.append(Requirement(
-                requirement_id=generate_id("req"),
-                category="financial",
-                description=f"Net Worth not less than Rs. {val:.1f} Crore",
-                threshold_value=val,
-                threshold_unit="INR_crores",
-                is_mandatory=True,
-                source_clause=_find_clause(m.start()),
-                raw_text=m.group(0),
-            ))
+            requirements.append(
+                Requirement(
+                    requirement_id=generate_id("req"),
+                    category="financial",
+                    description=f"Net Worth not less than Rs. {val:.1f} Crore",
+                    threshold_value=val,
+                    threshold_unit="INR_crores",
+                    is_mandatory=True,
+                    source_clause=_find_clause(m.start()),
+                    raw_text=m.group(0),
+                )
+            )
 
         logger.info(
             "requirement_extraction_regex_complete",

@@ -5,10 +5,10 @@ import pytest
 from src.extractor.requirement_extractor import Requirement
 from src.qualification.eligibility import EligibilityResult, RequirementResult, RequirementStatus
 
-
 # ---------------------------------------------------------------------------
 # Sample tender text
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture
 def sample_tender_text() -> str:
@@ -54,6 +54,7 @@ Submission Deadline: 15/08/2024
 # Sample company profile
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture
 def sample_company_profile() -> dict:
     """A synthetic company profile for testing eligibility checks."""
@@ -98,6 +99,7 @@ def sample_company_profile() -> dict:
 # ---------------------------------------------------------------------------
 # Sample requirements list
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture
 def sample_requirements() -> list[Requirement]:
@@ -159,6 +161,7 @@ def sample_requirements() -> list[Requirement]:
 # ---------------------------------------------------------------------------
 # Sample eligibility result (all pass)
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture
 def all_pass_eligibility_result() -> EligibilityResult:
@@ -224,6 +227,7 @@ def all_pass_eligibility_result() -> EligibilityResult:
 # ---------------------------------------------------------------------------
 # Sample recommendation dict (for API tests)
 # ---------------------------------------------------------------------------
+
 
 @pytest.fixture
 def sample_recommendation_dict() -> dict:

@@ -52,14 +52,14 @@ class TextCleaner:
     def _fix_encoding_artifacts(self, text: str) -> str:
         """Fix common UTF-8/Latin-1 encoding artifacts from PDF extraction."""
         replacements = [
-            ("â€™", "'"),   # â€™ → '
-            ("â€œ", '"'),   # â€œ → "
-            ("â€", '"'),   # â€ → "
-            ("â€", "-"),   # â€" → -
-            ("Â ", " "),          # Â  → space (non-breaking space)
-            ("â€¦", "..."), # â€¦ → ...
-            ("﻿", ""),                 # BOM
-            ("\x00", ""),                   # null bytes
+            ("â€™", "'"),  # â€™ → '
+            ("â€œ", '"'),  # â€œ → "
+            ("â€", '"'),  # â€ → "
+            ("â€", "-"),  # â€" → -
+            ("Â ", " "),  # Â  → space (non-breaking space)
+            ("â€¦", "..."),  # â€¦ → ...
+            ("﻿", ""),  # BOM
+            ("\x00", ""),  # null bytes
         ]
         for bad, good in replacements:
             text = text.replace(bad, good)
@@ -80,17 +80,13 @@ class TextCleaner:
                 line_counts[stripped] += 1
 
         repeated_lines = {
-            line for line, count in line_counts.items()
-            if count >= HEADER_FOOTER_MIN_OCCURRENCES
+            line for line, count in line_counts.items() if count >= HEADER_FOOTER_MIN_OCCURRENCES
         }
 
         if repeated_lines:
             logger.debug("cleaner_removed_headers", count=len(repeated_lines))
 
-        cleaned_lines = [
-            line for line in lines
-            if line.strip() not in repeated_lines
-        ]
+        cleaned_lines = [line for line in lines if line.strip() not in repeated_lines]
         return "\n".join(cleaned_lines)
 
     def _rejoin_hyphenated_words(self, text: str) -> str:
@@ -115,9 +111,9 @@ class TextCleaner:
     def _remove_standalone_page_numbers(self, text: str) -> str:
         """Remove lines that are just page numbers (e.g., "- 5 -", "Page 5 of 12")."""
         patterns = [
-            r"^\s*-\s*\d+\s*-\s*$",          # - 5 -
+            r"^\s*-\s*\d+\s*-\s*$",  # - 5 -
             r"^\s*Page\s+\d+\s+of\s+\d+\s*$",  # Page 5 of 12
-            r"^\s*\d+\s*$",                     # standalone number (risky — only for very short lines)
+            r"^\s*\d+\s*$",  # standalone number (risky — only for very short lines)
         ]
         combined = re.compile("|".join(patterns), re.IGNORECASE | re.MULTILINE)
         return combined.sub("", text)

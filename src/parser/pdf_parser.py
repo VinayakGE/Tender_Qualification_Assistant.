@@ -15,6 +15,7 @@ from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
 
+
 # Probe once at module load — pdfplumber's dependency chain may cause an
 # unrecoverable Rust panic that cannot be caught inside this process.
 def _probe_pdfplumber() -> bool:
@@ -27,6 +28,7 @@ def _probe_pdfplumber() -> bool:
         return result.returncode == 0
     except Exception:
         return False
+
 
 _PDFPLUMBER_AVAILABLE: bool = _probe_pdfplumber()
 
@@ -92,6 +94,7 @@ class PDFParser:
             )
             try:
                 from src.parser.ocr import OCRExtractor
+
                 text = OCRExtractor().extract(path)
                 method = "ocr"
                 logger.info("pdf_ocr_extraction_complete", path=str(path), total_chars=len(text))
@@ -114,6 +117,7 @@ class PDFParser:
             return "", ""
         try:
             import pdfplumber
+
             pages_text: list[str] = []
             with pdfplumber.open(str(path)) as pdf:
                 for page_num, page in enumerate(pdf.pages, start=1):
@@ -164,7 +168,7 @@ class PDFParser:
         n = len(stream)
 
         while i < n:
-            if stream[i:i+1] != b"(":
+            if stream[i : i + 1] != b"(":
                 i += 1
                 continue
 
@@ -174,7 +178,7 @@ class PDFParser:
             text_buf = bytearray()
             while j < n and depth > 0:
                 b = stream[j]
-                if stream[j:j+1] == b"\\" and j + 1 < n:
+                if stream[j : j + 1] == b"\\" and j + 1 < n:
                     # Escape sequence — keep the escaped byte, skip the backslash
                     text_buf.append(stream[j + 1])
                     j += 2
@@ -189,7 +193,7 @@ class PDFParser:
                 j += 1
 
             # Check whether this string literal is followed by Tj (with optional whitespace)
-            after = stream[j + 1:j + 10].lstrip(b" \t\r\n")
+            after = stream[j + 1 : j + 10].lstrip(b" \t\r\n")
             if after.startswith(b"Tj"):
                 try:
                     text = bytes(text_buf).decode("latin-1")
@@ -215,6 +219,7 @@ class PDFParser:
         if _PDFPLUMBER_AVAILABLE:
             try:
                 import pdfplumber
+
                 with pdfplumber.open(str(path)) as pdf:
                     return len(pdf.pages)
             except Exception:

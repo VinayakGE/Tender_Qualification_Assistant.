@@ -46,12 +46,15 @@ class ReasoningBuilder:
 
         # Mandatory failures
         failed_mandatory = [
-            r for r in eligibility_result.requirement_results
+            r
+            for r in eligibility_result.requirement_results
             if r.is_mandatory and r.status == RequirementStatus.FAIL
         ]
         if failed_mandatory:
             for r in failed_mandatory[:3]:  # Cap at 3 to keep text concise
-                parts.append(f"Mandatory requirement failed: {r.description}. {r.evidence_description}")
+                parts.append(
+                    f"Mandatory requirement failed: {r.description}. {r.evidence_description}"
+                )
 
         # Evidence gaps
         if evidence_gaps:
