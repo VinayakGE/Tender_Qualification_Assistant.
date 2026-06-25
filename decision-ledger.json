@@ -224,5 +224,30 @@
     "failed_mandatory_requirements": [],
     "pipeline_duration_seconds": 0.012,
     "created_at": "2026-06-25T15:37:11Z"
+  },
+  {
+    "recommendation_id": "rec_57ca6f38",
+    "tender_id": "tender-001",
+    "company_id": "APEX-INFRA-001",
+    "recommendation": "REVIEW",
+    "qualification_score": 100,
+    "competitive_strength": 44,
+    "incumbent_risk": 75,
+    "execution_risk": 13,
+    "value_score": 58,
+    "primary_bottleneck": "Historical Vendor Dominance",
+    "evidence_gaps": [],
+    "extraction_warnings": [
+      "Offline mode: regex extraction only — LLM extraction disabled"
+    ],
+    "confidence": 1.0,
+    "confidence_reason": [
+      "4 of 4 mandatory requirements verified",
+      "Incumbent risk score (75) exceeds threshold — prior vendor advantage inferred from tender language"
+    ],
+    "reasoning": "Recommendation: REVIEW. Qualification score: 100/100. Primary issue: Historical Vendor Dominance.",
+    "failed_mandatory_requirements": [],
+    "pipeline_duration_seconds": 0.01,
+    "created_at": "2026-06-25T16:06:00Z"
   }
 ]
