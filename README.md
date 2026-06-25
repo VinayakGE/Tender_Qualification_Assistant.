@@ -52,11 +52,13 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 2. Configure environment
+### 2. Configure environment (optional)
 
 ```bash
 cp .env.example .env
-# Set ANTHROPIC_API_KEY in .env
+# ANTHROPIC_API_KEY is optional.
+# Without it, the pipeline uses regex-based extraction and omits the natural-language reasoning field.
+# Set it only when you want LLM-powered requirement extraction and explanations.
 ```
 
 ### 3. Run on a single tender

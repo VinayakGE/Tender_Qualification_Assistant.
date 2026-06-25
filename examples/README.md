@@ -30,9 +30,13 @@ A synthetic but realistic Indian government tender: construction of a two-lane r
 ```json
 {
   "recommendation": "REVIEW",
-  "qualification_score": 84,
-  "primary_bottleneck": "Historical vendor dominance",
-  "confidence": 0.81
+  "qualification_score": 100,
+  "primary_bottleneck": "Historical Vendor Dominance",
+  "confidence": 1.0,
+  "confidence_reason": [
+    "4 of 4 mandatory requirements verified",
+    "Incumbent risk score (75) exceeds threshold — prior vendor advantage inferred from tender language"
+  ]
 }
 ```
 
@@ -47,7 +51,7 @@ A synthetic but realistic Indian government tender: construction of a two-lane r
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env          # add your ANTHROPIC_API_KEY
+# No API key required. Copy .env.example if you want to add one later.
 ```
 
 ### One command
@@ -61,21 +65,23 @@ python scripts/run_pipeline.py \
 ### Expected output
 
 ```
-pipeline_started   tender_id=tender-001  company_id=APEX-INFRA-001
-stage_complete     stage=parser          text_chars=4821
-stage_complete     stage=extractor       requirements_found=6
-stage_complete     stage=qualification   overall_pass=True  mandatory_fails=0
-stage_complete     stage=scoring         qualification_score=84  incumbent_risk=71
-stage_complete     stage=recommendation  recommendation=REVIEW
-stage_complete     stage=ledger
-pipeline_complete  recommendation=REVIEW  duration_seconds=4.2
+Processing: Tender-001.pdf
+Profile:    company-profile.json
 
-Recommendation written to: data/outcomes/tender-001_recommendation.json
+============================================================
+RECOMMENDATION: REVIEW
+Qualification Score: 100/100
+Competitive Strength: 44/100
+Incumbent Risk: 75/100
+Execution Risk: 13/100
+Value Score: 58/100
+Confidence: 1.00
+
+Primary Bottleneck: Historical Vendor Dominance
+============================================================
 ```
 
-### Without an API key
-
-The pipeline will still run. The `reasoning` field in the output will be `null` — the LLM explanation stage fails gracefully and the rest of the pipeline completes.
+The `reasoning` field is `null` unless `ANTHROPIC_API_KEY` is set — the LLM explanation stage is skipped gracefully and the rest of the pipeline completes normally.
 
 ---
 

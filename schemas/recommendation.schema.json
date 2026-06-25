@@ -11,6 +11,7 @@
     "recommendation",
     "qualification_score",
     "confidence",
+    "confidence_reason",
     "created_at"
   ],
   "properties": {
@@ -65,10 +66,6 @@
       "type": ["string", "null"],
       "description": "The main reason for a REVIEW or NO_BID recommendation, using product taxonomy labels"
     },
-    "bottleneck_category": {
-      "type": ["string", "null"],
-      "description": "Internal classification of the primary bottleneck"
-    },
     "evidence_gaps": {
       "type": "array",
       "description": "List of specific evidence items missing from the company profile",
@@ -81,6 +78,13 @@
       "minimum": 0.0,
       "maximum": 1.0,
       "description": "Confidence in the recommendation (0.0-1.0). Below 0.60 indicates low confidence."
+    },
+    "confidence_reason": {
+      "type": "array",
+      "description": "Human-readable list of factors that drove the confidence score up or down",
+      "items": {
+        "type": "string"
+      }
     },
     "reasoning": {
       "type": ["string", "null"],
