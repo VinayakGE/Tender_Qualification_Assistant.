@@ -1,14 +1,14 @@
 # Opportunity Fit Engine — Candidate Architecture
 
-**Status: Unvalidated candidate — do not implement**
-**Origin: RA-1 Reality Acquisition sprint, derived from Tender001–003 evidence**
+**Status: Strengthened candidate — do not implement**
+**Origin: RA-1 Reality Acquisition sprint, derived from Tender001–004 evidence**
 **Evidence Gate: RA-1-Summary.md must be complete before this document advances to engineering**
 
 ---
 
 ## What RA-1 Is Revealing
 
-The current MVP pipeline assumes that if a company clears numeric thresholds (turnover, experience value, count), they are qualified. Three tenders have tested this assumption. All three produced a wrong recommendation. The failure is not in the threshold math — it is in the question the pipeline never asks:
+The current MVP pipeline assumes that if a company clears numeric thresholds (turnover, experience value, count), they are qualified. Four tenders have tested this assumption. All four produced a wrong recommendation. The failure is not in the threshold math — it is in the question the pipeline never asks:
 
 > What business is this company actually in?
 
@@ -43,24 +43,33 @@ Output
 
 ## Candidate: Opportunity Fit Engine
 
+The ordering is not an implementation detail — it is the core claim. Domain Fit must run before Qualification Fit. You should never evaluate thresholds before establishing that the company's work domain matches the tender's work domain. Tender004 made this concrete: the experience threshold was extracted and evaluated correctly, but the evaluation was meaningless because the experience domain was never checked.
+
 ```
 PDF + Company Profile
   │
   ▼
 ┌─────────────────────────────────┐
-│  1. Domain Fit                   │
+│  1. Domain Fit  [GATE]           │
 │  Does the company's commercial   │
 │  domain match the tender's       │
 │  required domain?                │
 │  → PASS / FAIL / UNCERTAIN       │
+│                                  │
+│  FAIL → pipeline terminates      │
+│         → NO BID                 │
+│  UNCERTAIN → pipeline continues  │
+│              with REVIEW flag    │
 └──────────────┬──────────────────┘
-               │ PASS / UNCERTAIN only
+               │ PASS or UNCERTAIN
                ▼
 ┌─────────────────────────────────┐
 │  2. Qualification Fit            │
 │  Do the company's numeric        │
 │  credentials meet the tender's   │
 │  extracted thresholds?           │
+│  Includes: value, count,         │
+│  AND experience domain           │
 │  → PASS / FAIL                   │
 └──────────────┬──────────────────┘
                │ PASS only
@@ -84,7 +93,7 @@ Recommend
   [BID / REVIEW / NO BID + rationale]
 ```
 
-**Key structural difference:** Domain Fit is a gate, not a score. A domain mismatch terminates the pipeline early with NO BID or REVIEW — it does not accumulate into a score that can be averaged away by strong turnover numbers.
+**Why ordering is non-negotiable:** Domain Fit is a gate, not a score. A domain mismatch terminates the pipeline early — it must not accumulate into a score that gets averaged away by strong turnover numbers. The current pipeline has no gate; it scores everything and recommends BID on a perfect score derived from a vacuous or domain-blind pass.
 
 ---
 

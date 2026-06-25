@@ -17,11 +17,19 @@ This is a **decision-policy** pattern, distinct from PAT-001 (Domain Fit):
 |---|---|---|---|---|---|---|
 | 1 | Tender003 (NIT Agartala Digitization) | 0 | 0.50 | BID | NO BID | Vacuous 100/100; confidence dropped but recommendation unchanged |
 
+## Negative Observations (Counterexamples)
+
+Tender004 is a negative observation for PAT-002: 5 requirements were extracted, confidence = 1.0, and BID was the result. The problem in Tender004 is not insufficient evidence — it is domain-blind evaluation of sufficient (but domain-stripped) evidence. PAT-002 and PAT-001 are therefore separable: PAT-001 can occur with full confidence (Tender001, Tender002, Tender004) or low confidence (Tender003). PAT-002 specifically requires near-zero extraction AND the vacuous-pass dynamic.
+
+| # | Tender | Requirements Extracted | Confidence | Engine Result | Notes |
+|---|---|---|---|---|---|
+| 1 | Tender004 (CRPF Communication Infra) | 5 | 1.00 | BID | Full evidence extracted — PAT-001 not PAT-002 |
+
 ## Observation Count
 1
 
 ## Counterexample Count
-0
+1
 
 ## Appeared In
 Tender003

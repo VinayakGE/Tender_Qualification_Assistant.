@@ -1,7 +1,7 @@
 # PAT-001 — Domain Fit
 
 ## Status
-Observation — **promotion threshold met** (pending RA-1 Summary completion before any Type 2 engineering change)
+**Validated Design Gap** — promotion threshold met; engineering change queued pending RA-1 Summary completion
 
 ## Definition
 
@@ -20,7 +20,7 @@ Examples of domains that are distinct and currently indistinguishable by the eng
 - Irrigation / dam / waterway
 - Electrical / power transmission
 - Rail / metro
-- Telecom / IT infrastructure
+- Telecom / IT infrastructure / communication systems
 - HVAC / MEP
 - Lift / escalator AMC
 - IT / digitization services
@@ -29,29 +29,30 @@ Examples of domains that are distinct and currently indistinguishable by the eng
 
 ## Observation Log
 
-| # | Tender | Domain Required | Company Domain | Engine Result | Human Result | Impact |
-|---|---|---|---|---|---|---|
-| 1 | Tender001 (CRPF BOP Rajasthan) | Building construction (defence) | Road construction | BID (pass) | REVIEW | High |
-| 2 | Tender002 (NIT Agartala Otis Lift AMC) | Lift AMC / OEM-authorized service | Road construction | BID (pass) | NO BID | High |
-| 3 | Tender003 (NIT Agartala Digitization) | IT services / document digitization | Road construction | BID (pass, 0.50 confidence) | NO BID | High |
+| # | Tender | Domain Required | Company Domain | Engine Result | Human Result | Impact | Extraction Mode |
+|---|---|---|---|---|---|---|---|
+| 1 | Tender001 (CRPF BOP Rajasthan) | Building construction (defence) | Road construction | BID (pass) | REVIEW | High | 4 reqs extracted; experience missed |
+| 2 | Tender002 (NIT Agartala Otis Lift AMC) | Lift AMC / OEM-authorized service | Road construction | BID (pass) | NO BID | High | 1 req extracted (turnover only) |
+| 3 | Tender003 (NIT Agartala Digitization) | IT services / document digitization | Road construction | BID (pass, 0.50 conf) | NO BID | High | 0 reqs extracted; vacuous pass |
+| 4 | Tender004 (CRPF Communication Infra) | Communication / networking systems | Road construction | BID (pass) | NO BID | High | 5 reqs extracted; experience extracted but domain-blind pass |
 
 ## Observation Count
-3
+4
 
 ## Counterexample Count
 0
 
 ## Appeared In
-Tender001, Tender002, Tender003
+Tender001, Tender002, Tender003, Tender004
 
 ## Bucket
-B (Extraction — domain type not captured in any requirement field)
+B/C boundary — Tender001–003: primarily Bucket B (domain type not captured in extraction). Tender004 crosses into Bucket C: the experience requirement was correctly extracted (value/count), the eligibility checker was invoked, and it still passed road projects against a communication/networking requirement. Domain blindness is now demonstrated in the qualification logic, not just in extraction.
 
 ## Impact
-High (3 of 3 observations) — wrong BID recommendation on all three tenders; all would result in immediate disqualification or wasted bid preparation; Tender002 and Tender003 are outright NO BID (OEM certificate and IT experience are structural disqualifiers that no threshold check can catch)
+High (4 of 4 observations) — wrong BID recommendation on all four tenders; all would result in disqualification or wasted bid effort; three are outright NO BID
 
 ## Engineering
-None
+None (queued post-RA-1)
 
 ## Promotion Threshold
 ≥ 3 independent tenders showing domain-fit mismatch with High impact,
@@ -59,29 +60,51 @@ AND at least 2 different sectors,
 AND at least 2 different issuing authorities,
 AND zero counterexamples.
 
-**Threshold met as of Tender003:** 3 tenders, 3 sectors (building construction; lift AMC; IT digitization), 2 authorities (CRPF; NIT Agartala), 0 counterexamples. Engineering change blocked by RA-1 sprint freeze — no Type 2 change until RA-1-Summary.md is complete.
+**Threshold met as of Tender003.** Current state: 4 tenders, 4 sectors (building; lift AMC; IT digitization; communication infrastructure), 2 authorities (CRPF; NIT Agartala), 0 counterexamples.
+
+## Experience as Two Dimensions
+
+Tender004 surfaces a precise refinement of the data model. The eligibility checker currently answers:
+
+> "Has the company completed three projects worth Rs. 10 Crore?"
+
+The tender actually asks:
+
+> "Has the company completed three *communication infrastructure* projects worth Rs. 10 Crore?"
+
+This means "experience" in the current model conflates two distinct dimensions:
+
+1. **Quantity / value** — how many projects, at what scale (currently evaluated)
+2. **Experience domain** — what type of work those projects represent (not evaluated)
+
+A correct experience check requires both. The `Requirement` schema has no field for experience domain. This is the precise schema gap that enables the domain-blind pass observed in Tender004.
 
 ## Candidate Subtypes
 
 Both subtypes share the same root cause but manifest differently. Promote as a single pattern — the split exists for engineering precision later.
 
 **Subtype A — Work-Type Domain Mismatch**
-The bidder's completed work portfolio is in a different sector than the tender requires. Engine passes on value threshold alone.
-- Example: road contractor evaluated on building construction tender (Tender001), IT digitization tender (Tender003).
+The bidder's completed work portfolio is in a different sector than the tender requires. Engine passes on value/count alone.
+- Observations: Tender001 (road vs building), Tender003 (road vs IT), Tender004 (road vs communication).
+- In Tender004: experience requirement was extracted; checker was invoked; checker still passed on value alone.
 
 **Subtype B — Required Relationship**
 The tender requires a formal authorization relationship between the bidder and a third party (manufacturer, OEM, regulator). No threshold value exists to extract; the requirement is structural and non-numeric.
-- Examples: OEM authorization, dealer certification, manufacturer approval, technology partnership, empanelment on approved vendor list.
-- Tender002 (Otis OEM certificate) is the first and only observation.
+- Examples: OEM authorization, dealer certification, manufacturer approval, empanelment.
+- Observations: Tender002 (Otis OEM certificate).
 
 ## Notes
 
-This pattern sits at the B/C boundary:
-- **Bucket B root cause**: the `Requirement` schema has no `domain`, `work_type`, `sector`, or `authorization_relationship` field; extraction cannot record what domain the experience must be in or what authorization is structurally required
-- **Bucket C consequence**: the eligibility checker has no logic to compare company domain against requirement domain, or to detect that authorization relationships cannot be satisfied; it passes on value alone
+**On the shift from H1 to H2 (Tender004 evidence):**
 
-**On the product-level implication:** Domain Fit is not a feature to be added to the existing pipeline — it is a prerequisite gate that runs before threshold evaluation. The current pipeline sequence (extract → check thresholds → score → recommend) assumes domain fit; it never tests it. See `docs/OFE-candidate.md` for the candidate architecture that addresses this structural gap.
+Before Tender004, two hypotheses were open:
+- H1: Recommendations are wrong because extraction missed domain-specific requirements.
+- H2: Recommendations are wrong because qualification logic lacks domain awareness.
 
-A counterexample would be: a tender where the engine correctly identifies a domain-fit match or mismatch without explicit domain fields (e.g., because some other mechanism in the company profile is checked against the tender).
+Tender004 falsifies H1 as the primary explanation. The experience requirement was extracted. The checker evaluated it. The checker still returned PASS. H2 is now the stronger explanation for this failure class. Both extraction (B) and qualification logic (C) have gaps, but the qualification logic gap is the more fundamental one — it would remain even if extraction were perfect.
+
+**On the product-level implication:** Domain Fit is not a feature to be added — it is a prerequisite gate that precedes threshold evaluation. The current pipeline assumes domain fit; it never establishes it. See `docs/OFE-candidate.md` for the candidate architecture.
+
+A counterexample would be: a tender where the engine correctly identifies a domain match or mismatch (e.g., a road contractor evaluated on a road construction tender where the engine recommends BID and the human agrees).
 
 **Engineering change requires RA-1-Summary.md completion before implementation.**
