@@ -42,6 +42,9 @@ class QualificationScorer:
         if not mandatory:
             # No mandatory requirements — score based on optionals only
             final = optional_score
+        elif mandatory_score == 0.0:
+            # All mandatory requirements failed — hard zero regardless of optionals
+            final = 0.0
         else:
             final = (mandatory_score * MANDATORY_WEIGHT + optional_score * OPTIONAL_WEIGHT) / (
                 MANDATORY_WEIGHT + OPTIONAL_WEIGHT

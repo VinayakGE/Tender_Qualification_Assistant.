@@ -70,7 +70,7 @@ class PDFParser:
             method = "stream"
             logger.info("pdf_extraction_method", path=str(path), method=method)
 
-        pages = self._estimate_page_count(path)
+        pages = self._count_pages(path)
         avg_chars = len(text) / max(pages, 1)
 
         logger.debug(
@@ -206,8 +206,12 @@ class PDFParser:
     # Helpers
     # ------------------------------------------------------------------
 
-    def _estimate_page_count(self, path: Path) -> int:
-        """Estimate page count from PDF structure without full parse."""
+    def _count_pages(self, path: Path) -> int:
+        """Count pages from PDF structure without full parse.
+
+        Returns 0 if the file is not a valid PDF or has no detectable pages.
+        Callers should use max(pages, 1) before dividing.
+        """
         if _PDFPLUMBER_AVAILABLE:
             try:
                 import pdfplumber
@@ -220,7 +224,6 @@ class PDFParser:
         try:
             with open(path, "rb") as f:
                 data = f.read()
-            count = len(re.findall(rb"/Type\s*/Page\b", data))
-            return max(count, 1)
+            return len(re.findall(rb"/Type\s*/Page\b", data))
         except Exception:
-            return 1
+            return 0
