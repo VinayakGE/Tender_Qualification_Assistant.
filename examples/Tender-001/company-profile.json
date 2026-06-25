@@ -1,0 +1,50 @@
+{
+  "company_id": "APEX-INFRA-001",
+  "name": "Apex Infrastructure Pvt Ltd",
+  "annual_turnover_inr_crores": [42.3, 38.1, 51.2],
+  "years_in_operation": 12,
+  "certifications": ["ISO 9001:2015", "ISO 14001:2015"],
+  "completed_projects": [
+    {
+      "project_id": "PRJ-001",
+      "name": "NH-48 Road Widening, Karnataka",
+      "authority": "NHAI",
+      "value_inr_crores": 28.5,
+      "sector": "road-construction",
+      "duration_months": 18,
+      "completion_year": 2022,
+      "performance_certificate": true
+    },
+    {
+      "project_id": "PRJ-002",
+      "name": "Urban Road Development Package B, Pune",
+      "authority": "PMRDA",
+      "value_inr_crores": 14.2,
+      "sector": "road-construction",
+      "duration_months": 12,
+      "completion_year": 2023,
+      "performance_certificate": true
+    },
+    {
+      "project_id": "PRJ-003",
+      "name": "State Highway Repair & Maintenance, MP",
+      "authority": "MP PWD",
+      "value_inr_crores": 11.8,
+      "sector": "road-construction",
+      "duration_months": 9,
+      "completion_year": 2024,
+      "performance_certificate": true
+    }
+  ],
+  "financial_net_worth_inr_crores": 18.4,
+  "working_capital_inr_crores": 9.2,
+  "employees": 340,
+  "key_personnel": [
+    {"role": "Project Director", "qualification": "B.E. Civil", "experience_years": 18},
+    {"role": "Site Engineer", "qualification": "B.E. Civil", "experience_years": 8}
+  ],
+  "pan": "AABCA1234C",
+  "gstin": "29AABCA1234C1Z5",
+  "registered_state": "Karnataka",
+  "class_registration": "Class-I PWD Contractor"
+}
