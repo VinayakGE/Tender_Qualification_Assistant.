@@ -1,11 +1,21 @@
-# PAT-003 — Clause Cross-Contamination
+# PAT-003 — Requirement Resolution Failure
 
 ## Status
-Observation — not promoted to engineering
+**Promoted — engineering queued post-RA-1**
 
 ## Definition
 
-The regex extractors share a common structural flaw: all patterns are run independently via `finditer()` across the full document text, with no proximity constraints, no deduplication, and no conflict resolution between multiple matches. This produces two distinct contamination subtypes:
+The pipeline produces **candidate requirements** — raw matches from regex patterns — but has no **resolution** stage. It treats every match as an independent, authoritative requirement. When the same requirement appears in multiple document locations (table, corrigendum original, corrigendum amended), or when a value from one clause contaminates another, the pipeline accumulates all candidates as peers and passes them all to qualification with equal weight.
+
+The missing capability is a resolver: a stage that takes candidate requirements and determines which version governs. Without it, the pipeline cannot handle corrigenda, duplicate clauses, or cross-clause value contamination correctly.
+
+**Pipeline gap (current vs. needed):**
+```
+Current:    PDF → Candidate Requirements → Qualification
+Needed:     PDF → Candidate Requirements → Requirement Resolution → Canonical Requirements → Qualification
+```
+
+All regex patterns share the root cause: `finditer()` across the full document text with no proximity constraints, no deduplication, and no conflict resolution. Two distinct failure subtypes have been observed:
 
 **Subtype A — Value Cross-Contamination (Tender006)**
 `_EXPERIENCE_VALUE_RE` matches the **first** occurrence of any numeric value pattern in the document regardless of semantic association. When the turnover clause appears before the experience clause (standard NIT format), the turnover value is extracted as the experience threshold.
@@ -40,34 +50,52 @@ Correct:   Rs. 50 Crore (corrigendum supersedes)
 
 ## Observation Log
 
-| # | Tender | Subtype | Pattern | Extracted (Wrong) | Correct Value | Decision Impact |
+| # | Tender | Authority | Subtype | Accumulation Result | Authoritative Value | Decision Impact |
 |---|---|---|---|---|---|---|
-| 1 | Tender006 (NHAI NH-66) | A — Value Cross-Contamination | `_EXPERIENCE_VALUE_RE` | Rs. 150 Cr (from turnover) | Rs. 75 Cr | None — Apex fails both |
-| 2 | Tender008 (CPWD KVS) | B — Version Accumulation | `_TURNOVER_RE` | Rs. 25 Cr ×2 (obsolete) + Rs. 50 Cr | Rs. 50 Cr (corrigendum) | None — correct value also extracted; NO_BID driven by Rs. 50 Cr fail |
+| 1 | Tender006 (NHAI NH-66) | NHAI | A — Value Cross-Contamination | Rs. 150 Cr from turnover as experience | Rs. 75 Cr (experience) | None — Apex fails both |
+| 2 | Tender008 (CPWD KVS) | CPWD | B — Version Accumulation (1 corrigendum) | [Rs. 25 Cr ×2, Rs. 50 Cr ×1] | Rs. 50 Cr (Corr. 1 amended) | None — correct value also extracted |
+| 3 | Tender009 (RVNL ROB) | RVNL | B — Version Accumulation (2 corrigenda) | [Rs. 55 Cr ×2, Rs. 30 Cr ×1, Rs. 50 Cr ×2] | Rs. 55 Cr (Corr. 2 amended) | None — correct value also extracted; 4 of 5 candidates fail |
+
+**Accumulation scaling:** 1 corrigendum → 3 candidates (Tender008); 2 corrigenda → 5 candidates (Tender009). Growth is approximately 2N+1 where N = number of corrigenda.
 
 ## Observation Count
-2
+3
 
 ## Counterexample Count
 0
 
 ## Appeared In
-Tender006, Tender008
+Tender006, Tender008, Tender009
 
 ## Bucket
-B (Extraction) — wrong values extracted or multiple versions accumulated; decision impact depends on relative magnitudes and which version is extracted.
+B (Extraction / Pre-resolution) — resolution stage does not exist; pipeline accumulates candidates without determining which governs. Decision impact depends on relative magnitudes of accumulated values and which version(s) happen to be extracted.
 
 ## Impact
 - Observation 1 (Subtype A, Tender006): Low — decision unchanged (Apex fails both contaminated and true thresholds). **Latent High**: if contaminated value is lower than true threshold and Apex's profile falls between them, engine incorrectly PASSes.
-- Observation 2 (Subtype B, Tender008): Low — correct value was one of three accumulated values; NO_BID driven by the Rs. 50 Crore failure. **Latent High**: if only original pre-corrigendum value were extracted, recommendation would differ depending on direction of amendment.
+- Observation 2 (Subtype B, Tender008): Low — correct amended value was one of three accumulated turnover candidates; NO_BID driven by Rs. 50 Crore failure (Apex 43.87 < 50). **Latent High**: if the corrigendum had LOWERED the threshold and only the original (higher) value were extracted, engine could recommend NO_BID when BID is correct — or vice versa.
 
 ## Engineering
-None
+Queued — implementation post-RA-1 completion and RA-1-Summary.md
+
+**Engineering direction (candidate):**
+The fix requires adding a Requirement Resolution stage between extraction and qualification:
+
+```
+Current:  PDF → Candidate Requirements → Qualification
+Needed:   PDF → Candidate Requirements → Requirement Resolution → Canonical Requirements → Qualification
+```
+
+Resolver responsibilities:
+- Subtype A: windowed search — run `_EXPERIENCE_VALUE_RE` on a substring anchored to the `_EXPERIENCE_RE` match position, not the full document
+- Subtype B: document-section tagging — detect corrigendum blocks; when multiple candidates in the same category exist and a corrigendum section is present, prefer the candidate from the latest corrigendum section
+- Both subtypes: deduplication — when two candidates have identical category + threshold, collapse to one
+
+**Do not implement during RA-1.**
 
 ## Promotion Threshold
-≥ 3 independent tenders where cross-contamination occurs AND at least 1 case where the wrong threshold changes the recommendation (output impact, not just extraction impact).
+≥ 3 independent tenders exhibiting resolution failure under at least 2 different authorities.
 
-**Note:** Promotion threshold differs from PAT-001/PAT-002 because the extraction error is structural. Even 1 confirmed output impact would be sufficient to escalate to engineering.
+**Threshold met:** 3 observations (Tender006, Tender008, Tender009), 3 authorities (NHAI, CPWD, RVNL), 2 subtypes (A and B). Promoted.
 
 ## Notes
 
