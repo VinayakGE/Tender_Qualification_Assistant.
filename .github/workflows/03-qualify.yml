@@ -1,0 +1,48 @@
+name: "03 - Qualification"
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/parsed-tenders/**'
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: 'Company profile JSON path'
+        required: false
+        default: 'data/sample-data/sample_company_profile.json'
+
+jobs:
+  qualify:
+    name: Run qualification checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run qualification + scoring
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          PROFILE="${{ github.event.inputs.profile || 'data/sample-data/sample_company_profile.json' }}"
+          python scripts/score_all.py --profile "$PROFILE" --log-level INFO
+
+      - name: Commit scores
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/outcomes/ decision-ledger.json || true
+          git diff --staged --quiet || git commit -m "feat(qualification): run qualification on new tenders [automated]"
+          git push || true

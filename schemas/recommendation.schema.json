@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tender-qualification-assistant/schemas/recommendation.schema.json",
+  "title": "Recommendation",
+  "description": "The output recommendation from the Tender Qualification Assistant pipeline",
+  "type": "object",
+  "required": [
+    "recommendation_id",
+    "tender_id",
+    "company_id",
+    "recommendation",
+    "qualification_score",
+    "confidence",
+    "created_at"
+  ],
+  "properties": {
+    "recommendation_id": {
+      "type": "string",
+      "description": "Unique identifier for this recommendation"
+    },
+    "tender_id": {
+      "type": "string",
+      "description": "Identifier of the tender that was analyzed"
+    },
+    "company_id": {
+      "type": "string",
+      "description": "Identifier of the company profile used"
+    },
+    "recommendation": {
+      "type": "string",
+      "enum": ["BID", "REVIEW", "NO_BID"],
+      "description": "The final recommendation"
+    },
+    "qualification_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Qualification fit score (0-100). 80+ = PASS, 60-79 = MARGINAL, <60 = FAIL"
+    },
+    "competitive_strength": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Competitive position score (0-100)"
+    },
+    "incumbent_risk": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Incumbent retention risk score (0-100). 70+ = high risk"
+    },
+    "execution_risk": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Execution/delivery risk score (0-100)"
+    },
+    "value_score": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Composite opportunity value score (0-100)"
+    },
+    "primary_bottleneck": {
+      "type": ["string", "null"],
+      "description": "The main reason for a REVIEW or NO_BID recommendation, using product taxonomy labels"
+    },
+    "bottleneck_category": {
+      "type": ["string", "null"],
+      "description": "Internal classification of the primary bottleneck"
+    },
+    "evidence_gaps": {
+      "type": "array",
+      "description": "List of specific evidence items missing from the company profile",
+      "items": {
+        "type": "string"
+      }
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Confidence in the recommendation (0.0-1.0). Below 0.60 indicates low confidence."
+    },
+    "reasoning": {
+      "type": ["string", "null"],
+      "description": "Human-readable reasoning paragraph explaining the recommendation"
+    },
+    "failed_mandatory_requirements": {
+      "type": "array",
+      "description": "List of mandatory requirement IDs that failed the eligibility check",
+      "items": {
+        "type": "string"
+      }
+    },
+    "pipeline_duration_seconds": {
+      "type": ["number", "null"],
+      "description": "Total time taken to produce this recommendation"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when this recommendation was created (ISO 8601)"
+    }
+  },
+  "additionalProperties": false
+}

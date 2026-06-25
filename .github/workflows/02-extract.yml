@@ -1,0 +1,46 @@
+name: "02 - Requirement Extraction"
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/raw-tenders/**'
+  workflow_dispatch:
+
+jobs:
+  extract:
+    name: Extract requirements from new tender PDFs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          # Install system deps for OCR fallback
+          sudo apt-get update -q
+          sudo apt-get install -y -q tesseract-ocr poppler-utils
+
+      - name: Run batch parser
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          python scripts/parse_all.py --log-level INFO
+
+      - name: Commit parsed tenders
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/parsed-tenders/ || true
+          git diff --staged --quiet || git commit -m "feat(extractor): extract requirements from new tenders [automated]"
+          git push || true

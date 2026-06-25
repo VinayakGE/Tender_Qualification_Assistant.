@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tender-qualification-assistant/schemas/evidence.schema.json",
+  "title": "Evidence",
+  "description": "An evidence item linking a company's data to a tender requirement",
+  "type": "object",
+  "required": ["evidence_id", "requirement_id", "evidence_type", "gap"],
+  "properties": {
+    "evidence_id": {
+      "type": "string",
+      "description": "Unique identifier for this evidence item"
+    },
+    "requirement_id": {
+      "type": "string",
+      "description": "The requirement this evidence relates to"
+    },
+    "evidence_type": {
+      "type": "string",
+      "enum": [
+        "audited_accounts",
+        "completion_certificate",
+        "work_order",
+        "certification_document",
+        "bank_statement",
+        "net_worth_certificate",
+        "incorporation_certificate",
+        "power_of_attorney",
+        "board_resolution",
+        "other"
+      ],
+      "description": "Type of document or evidence"
+    },
+    "description": {
+      "type": ["string", "null"],
+      "description": "Description of what this evidence proves"
+    },
+    "value": {
+      "type": ["number", "null"],
+      "description": "Numeric value if applicable (e.g., turnover amount, project value)"
+    },
+    "unit": {
+      "type": ["string", "null"],
+      "description": "Unit for the value (e.g., 'INR_crores', 'years')"
+    },
+    "verified": {
+      "type": "boolean",
+      "description": "Whether this evidence has been verified (e.g., CA-certified, stamped)"
+    },
+    "source_document": {
+      "type": ["string", "null"],
+      "description": "Filename or path to the source document, if available"
+    },
+    "gap": {
+      "type": "boolean",
+      "description": "True if this is a gap (evidence is required but not available or not documented)"
+    },
+    "gap_description": {
+      "type": ["string", "null"],
+      "description": "If gap=true, describes what is missing and why it matters"
+    }
+  },
+  "additionalProperties": false
+}
