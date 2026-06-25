@@ -35,6 +35,7 @@ Examples of domains that are distinct and currently indistinguishable by the eng
 | 2 | Tender002 (NIT Agartala Otis Lift AMC) | Lift AMC / OEM-authorized service | Road construction | BID (pass) | NO BID | High | 1 req extracted (turnover only) |
 | 3 | Tender003 (NIT Agartala Digitization) | IT services / document digitization | Road construction | BID (pass, 0.50 conf) | NO BID | High | 0 reqs extracted; vacuous pass |
 | 4 | Tender004 (CRPF Communication Infra) | Communication / networking systems | Road construction | BID (pass) | NO BID | High | 5 reqs extracted; experience extracted but domain-blind pass |
+| 5 | Tender007 (CNNL Canal Desilting) | Irrigation / canal works | Road construction | BID (pass) | NO BID | High | 1 req extracted (turnover only); experience not extracted — domain noun "canal" broke regex |
 
 ## Counterexample Log
 
@@ -43,7 +44,7 @@ Examples of domains that are distinct and currently indistinguishable by the eng
 | C1 | Tender005 (BBMP Road Resurfacing) | Road / highway | Road construction | BID | BID | Output-level | Experience req not extracted; checker not invoked; correct output via incomplete evidence |
 
 ## Observation Count
-4
+5
 
 ## Counterexample Count
 1 (output-level) / 0 (logic-level)
@@ -72,7 +73,7 @@ AND at least 2 different sectors,
 AND at least 2 different issuing authorities,
 AND zero counterexamples.
 
-**Threshold met as of Tender003.** Current state: 4 failure observations, 4 sectors (building; lift AMC; IT digitization; communication infrastructure), 2 authorities (CRPF; NIT Agartala), 1 output-level counterexample (Tender005 — road contractor on road tender, engine and human both BID, but domain-aware logic not invoked). Promotion threshold remains met — the counterexample criterion requires zero output-level counterexamples only if the promotion threshold has not yet been met; Tender005 arrived after promotion and is recorded as a qualified counterexample, not a demotion signal.
+**Threshold met as of Tender003.** Current state: 5 failure observations, 5 sectors (building; lift AMC; IT digitization; communication infrastructure; irrigation/canal), 3 authorities (CRPF; NIT Agartala; CNNL), 1 output-level counterexample (Tender005). Promotion threshold remains met and is strengthening with each subsequent tender.
 
 ## Experience as Two Dimensions
 
@@ -133,6 +134,9 @@ Before Tender004, two hypotheses were open:
 Tender004 falsifies H1 as the primary explanation. The experience requirement was extracted. The checker evaluated it. The checker still returned PASS. H2 is now the stronger explanation for this failure class. Both extraction (B) and qualification logic (C) have gaps, but the qualification logic gap is the more fundamental one — it would remain even if extraction were perfect.
 
 **On the product-level implication:** Domain Fit is not a feature to be added — it is a prerequisite gate that precedes threshold evaluation. The current pipeline assumes domain fit; it never establishes it. See `docs/OFE-candidate.md` for the candidate architecture.
+
+**On domain adjacency (Tender007 evidence):**
+Irrigation/canal desilting involves civil earthwork and embankment repair — superficially similar to road construction. The difference is hydraulic context, not work type alone. A road contractor doing embankment work is doing road construction; the same contractor doing canal bank restoration is not doing irrigation work — the discipline context (hydraulic engineering, irrigation water management) is entirely different. The engine cannot detect this boundary. Tender007 shows that PAT-001 extends to "adjacent civil" domains, not just clearly distinct domains (IT, Lift AMC, Communication).
 
 A counterexample would be: a tender where the engine correctly identifies a domain match or mismatch (e.g., a road contractor evaluated on a road construction tender where the engine recommends BID and the human agrees).
 
