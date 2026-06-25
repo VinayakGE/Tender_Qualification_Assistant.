@@ -108,8 +108,13 @@ class PipelineRunner:
         stage = PipelineStage("extractor").start({"text_chars": len(clean_text)})
         try:
             metadata = MetadataExtractor().extract(clean_text)
-            requirements = RequirementExtractor().extract(clean_text, tender_id=tender_id)
-            stage.complete({"requirements_found": len(requirements)})
+            extraction = RequirementExtractor().extract(clean_text, tender_id=tender_id)
+            requirements = extraction.requirements
+            extraction_warnings = extraction.warnings
+            stage.complete({
+                "requirements_found": len(requirements),
+                "extraction_warnings": len(extraction_warnings),
+            })
         except Exception as exc:
             stage.fail(str(exc))
             run.add_stage(stage)
@@ -182,6 +187,7 @@ class PipelineRunner:
                 incumbent_risk=incumbent_risk,
                 execution_risk=execution_risk,
                 value_score=value_score,
+                extraction_warnings=extraction_warnings,
                 pipeline_duration_seconds=run.total_duration_seconds,
             )
             stage.complete({"recommendation": recommendation.recommendation})

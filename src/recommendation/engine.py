@@ -32,6 +32,7 @@ class Recommendation:
     primary_bottleneck: str | None
     bottleneck_category: str | None  # internal only — not exposed in to_dict()
     evidence_gaps: list[str]
+    extraction_warnings: list[str]
     confidence: float
     confidence_reason: list[str]
     reasoning: str | None
@@ -53,6 +54,7 @@ class Recommendation:
             "value_score": self.value_score,
             "primary_bottleneck": self.primary_bottleneck,
             "evidence_gaps": self.evidence_gaps,
+            "extraction_warnings": self.extraction_warnings,
             "confidence": self.confidence,
             "confidence_reason": self.confidence_reason,
             "reasoning": self.reasoning,
@@ -91,6 +93,7 @@ class RecommendationEngine:
         incumbent_risk: int | None = None,
         execution_risk: int | None = None,
         value_score: int | None = None,
+        extraction_warnings: list[str] | None = None,
         pipeline_duration_seconds: float | None = None,
     ) -> Recommendation:
         """Produce a recommendation from eligibility and scoring results.
@@ -155,6 +158,7 @@ class RecommendationEngine:
             primary_bottleneck=bottleneck_label,
             bottleneck_category=bottleneck_internal,
             evidence_gaps=evidence_gaps,
+            extraction_warnings=extraction_warnings or [],
             confidence=confidence,
             confidence_reason=confidence_reason,
             reasoning=reasoning,

@@ -1,6 +1,6 @@
 # Prompt: Requirement Extractor
 
-**Version:** 1.0.0  
+**Version:** 1.1.0  
 **Stage:** Extractor  
 **Model:** claude-sonnet-4-6  
 **Last updated:** 2024-06-01
@@ -21,20 +21,37 @@ You are an expert in Indian government procurement. You have deep knowledge of h
 You will receive the cleaned text of a government tender document. Extract ALL eligibility and pre-qualification requirements.
 
 OUTPUT FORMAT:
-Return a JSON array. Each element must be an object with exactly these fields:
+Return a JSON object with two keys: "requirements" and "warnings".
 
 {
-  "requirement_id": "req_001",          // sequential, zero-padded
-  "category": "<category>",             // see CATEGORIES below
-  "description": "<description>",       // precise, in your own words
-  "threshold_value": <number or null>,  // numeric threshold if present
-  "threshold_unit": "<unit or null>",   // unit for the threshold
-  "threshold_period_years": <int or null>, // lookback period if stated
-  "is_mandatory": <true or false>,      // see MANDATORY RULES below
-  "source_clause": "<clause or null>",  // exact clause reference from document
-  "raw_text": "<text>",                 // exact quoted text from tender
-  "certification_name": "<name or null>", // for certification requirements
-  "sector": "<sector or null>"          // for experience requirements
+  "requirements": [
+    {
+      "requirement_id": "req_001",          // sequential, zero-padded
+      "category": "<category>",             // see CATEGORIES below
+      "description": "<description>",       // precise, in your own words
+      "threshold_value": <number or null>,  // numeric threshold if present
+      "threshold_unit": "<unit or null>",   // unit for the threshold
+      "threshold_period_years": <int or null>, // lookback period if stated
+      "is_mandatory": <true or false>,      // see MANDATORY RULES below
+      "source_clause": "<clause or null>",  // exact clause reference from document
+      "source_page": <integer or null>,     // page number where requirement appears
+      "raw_text": "<text>",                 // exact quoted text from tender
+      "certification_name": "<name or null>", // for certification requirements
+      "sector": "<sector or null>",         // for experience requirements
+      "extraction_confidence": "High|Medium|Low"  // your confidence in this extraction
+    }
+  ],
+  "warnings": [
+    // List any of the following situations you encountered:
+    // - Requirement appears in a corrigendum or addendum only
+    // - Same requirement stated with conflicting thresholds in different clauses
+    // - A clause references an annexure that was not present in the text
+    // - The document appears to be scanned (low text quality)
+    // - JV/consortium eligibility clause present but incomplete
+    // - Mandatory/optional status is genuinely ambiguous
+    // - Any other situation that reduces confidence in the extraction
+    // Leave as empty array [] if no warnings.
+  ]
 }
 
 CATEGORIES (use exactly these values):
@@ -65,7 +82,7 @@ EXTRACTION RULES:
 5. Do not infer requirements that are not explicitly stated
 6. Do not merge similar requirements — extract each stated requirement separately
 
-IMPORTANT: Return ONLY the JSON array. No preamble, no explanation, no markdown code block markers.
+IMPORTANT: Return ONLY the JSON object. No preamble, no explanation, no markdown code block markers.
 
 TENDER TEXT:
 {tender_text}

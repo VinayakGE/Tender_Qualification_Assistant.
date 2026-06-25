@@ -86,6 +86,13 @@
         "type": "string"
       }
     },
+    "extraction_warnings": {
+      "type": "array",
+      "description": "Warnings surfaced by the extractor — ambiguous clauses, missing annexures, conflicting thresholds",
+      "items": {
+        "type": "string"
+      }
+    },
     "reasoning": {
       "type": ["string", "null"],
       "description": "Human-readable reasoning paragraph explaining the recommendation"

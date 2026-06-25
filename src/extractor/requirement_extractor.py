@@ -6,7 +6,9 @@ heuristic extraction when running without a key (Milestone 0 / offline mode).
 
 import json
 import re
+from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -60,9 +62,11 @@ class Requirement(BaseModel):
     threshold_period_years: int | None = None
     is_mandatory: bool
     source_clause: str | None = None
+    source_page: int | None = None
     raw_text: str | None = None
     certification_name: str | None = None
     sector: str | None = None
+    extraction_confidence: Literal["High", "Medium", "Low"] | None = None
 
     @field_validator("category")
     @classmethod
@@ -71,6 +75,14 @@ class Requirement(BaseModel):
         if v not in allowed:
             raise ValueError(f"Invalid category '{v}'. Must be one of: {allowed}")
         return v
+
+
+@dataclass
+class ExtractionResult:
+    """Output from RequirementExtractor — requirements plus any extraction warnings."""
+
+    requirements: list[Requirement] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
 
 
 class RequirementExtractor:
@@ -95,15 +107,15 @@ class RequirementExtractor:
             self._client = anthropic.Anthropic(api_key=self.config.ANTHROPIC_API_KEY)
         return self._client
 
-    def extract(self, tender_text: str, tender_id: str = "") -> list[Requirement]:
-        """Extract requirements from tender text.
+    def extract(self, tender_text: str, tender_id: str = "") -> ExtractionResult:
+        """Extract requirements and warnings from tender text.
 
         Args:
             tender_text: Cleaned tender document text.
             tender_id: Optional tender identifier for logging.
 
         Returns:
-            List of Requirement objects.
+            ExtractionResult with requirements list and warnings list.
 
         Raises:
             RuntimeError: If LLM call fails or response cannot be parsed.
@@ -127,16 +139,17 @@ class RequirementExtractor:
         )
 
         raw_response = self._call_claude(prompt)
-        requirements = self._parse_response(raw_response, tender_id)
+        result = self._parse_response(raw_response, tender_id)
 
         logger.info(
             "requirement_extraction_complete",
             tender_id=tender_id,
-            requirements_found=len(requirements),
-            mandatory_count=sum(1 for r in requirements if r.is_mandatory),
+            requirements_found=len(result.requirements),
+            mandatory_count=sum(1 for r in result.requirements if r.is_mandatory),
+            warnings_count=len(result.warnings),
         )
 
-        return requirements
+        return result
 
     def _load_prompt(self) -> str:
         """Load and cache the requirement extractor prompt."""
@@ -180,20 +193,20 @@ class RequirementExtractor:
         )
         return message.content[0].text
 
-    def _parse_response(self, raw_response: str, tender_id: str) -> list[Requirement]:
-        """Parse Claude's JSON response into Requirement objects.
+    def _parse_response(self, raw_response: str, tender_id: str) -> ExtractionResult:
+        """Parse Claude's JSON response into an ExtractionResult.
 
-        Attempts to parse as-is first, then strips markdown fences if needed,
-        then retries once with a validation prompt.
+        Accepts two response formats:
+        - Object: {"requirements": [...], "warnings": [...]}  (preferred)
+        - Array:  [...]  (backward-compatible with v1 prompt)
 
         Args:
             raw_response: Raw text from Claude.
             tender_id: Tender ID for logging context.
 
         Returns:
-            List of validated Requirement objects.
+            ExtractionResult with requirements and warnings.
         """
-        # Strip markdown code fences if present
         text = raw_response.strip()
         if text.startswith("```"):
             lines = text.split("\n")
@@ -212,18 +225,24 @@ class RequirementExtractor:
                 f"Failed to parse requirement extraction response as JSON: {exc}"
             ) from exc
 
-        if not isinstance(data, list):
+        # Support both the new object format and the old array format
+        if isinstance(data, list):
+            items = data
+            warnings: list[str] = []
+        elif isinstance(data, dict):
+            items = data.get("requirements", [])
+            warnings = [str(w) for w in data.get("warnings", []) if w]
+        else:
             raise RuntimeError(
-                f"Expected a JSON array from requirement extractor, got {type(data).__name__}"
+                f"Expected a JSON array or object from requirement extractor, got {type(data).__name__}"
             )
 
         requirements: list[Requirement] = []
-        for i, item in enumerate(data):
+        for i, item in enumerate(items):
             if not isinstance(item, dict):
                 logger.warning("requirement_item_not_dict", index=i, tender_id=tender_id)
                 continue
 
-            # Ensure requirement_id is set
             if not item.get("requirement_id"):
                 item["requirement_id"] = generate_id("req")
 
@@ -239,9 +258,9 @@ class RequirementExtractor:
                     item=item,
                 )
 
-        return requirements
+        return ExtractionResult(requirements=requirements, warnings=warnings)
 
-    def _extract_with_regex(self, text: str, tender_id: str) -> list[Requirement]:
+    def _extract_with_regex(self, text: str, tender_id: str) -> ExtractionResult:
         """Heuristic regex-based extraction used when no API key is configured.
 
         Recognises the most common requirement patterns in Indian government
@@ -346,4 +365,7 @@ class RequirementExtractor:
             requirements_found=len(requirements),
             note="Offline mode — LLM extraction disabled",
         )
-        return requirements
+        return ExtractionResult(
+            requirements=requirements,
+            warnings=["Offline mode: regex extraction only — LLM extraction disabled"],
+        )
