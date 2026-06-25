@@ -44,6 +44,9 @@ python scripts/run_pipeline.py \
 
 Bucket: —
 
+Decision Impact: High / Medium / Low
+Impact Reason: <!-- What would this failure actually cost? e.g. "2–3 days of wasted bid effort", "immediate disqualification", "cosmetic miss, recommendation unchanged" -->
+
 ## Observations
 
 <!-- What happened. One paragraph. No fixes, no proposals — just what you saw. -->
