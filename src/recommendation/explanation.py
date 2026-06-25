@@ -1,6 +1,8 @@
-"""LLM-powered natural language explanation generator for recommendations."""
+"""Natural language explanation generator for recommendations.
 
-import anthropic
+Uses Claude API when ANTHROPIC_API_KEY is set; falls back to a structured
+text summary otherwise (offline / Milestone 0 mode).
+"""
 
 from src.recommendation.engine import Recommendation
 from src.utils.config import get_config
@@ -18,8 +20,14 @@ class ExplanationGenerator:
 
     def __init__(self) -> None:
         self.config = get_config()
-        self.client = anthropic.Anthropic(api_key=self.config.ANTHROPIC_API_KEY)
+        self._client = None  # created lazily — avoids error when no API key
         self._prompt_template: str | None = None
+
+    def _get_client(self):
+        if self._client is None:
+            import anthropic
+            self._client = anthropic.Anthropic(api_key=self.config.ANTHROPIC_API_KEY)
+        return self._client
 
     def generate(self, recommendation: Recommendation) -> str:
         """Generate a natural language explanation for a recommendation.
@@ -32,9 +40,12 @@ class ExplanationGenerator:
         Returns:
             A 3-5 sentence explanation paragraph.
         """
+        if not self.config.ANTHROPIC_API_KEY:
+            return self._fallback_explanation(recommendation)
+
         try:
             prompt = self._build_prompt(recommendation)
-            message = self.client.messages.create(
+            message = self._get_client().messages.create(
                 model=self.config.MODEL,
                 max_tokens=500,
                 messages=[{"role": "user", "content": prompt}],
