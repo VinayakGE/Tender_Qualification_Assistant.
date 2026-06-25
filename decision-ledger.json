@@ -418,5 +418,196 @@
     "failed_mandatory_requirements": [],
     "pipeline_duration_seconds": 0.01,
     "created_at": "2026-06-25T19:54:56Z"
+  },
+  {
+    "recommendation_id": "rec_563c7bd1",
+    "tender_id": "tender006",
+    "company_id": "APEX-INFRA-001",
+    "recommendation": "NO_BID",
+    "qualification_score": 50,
+    "competitive_strength": 20,
+    "incumbent_risk": 20,
+    "execution_risk": 25,
+    "value_score": 56,
+    "primary_bottleneck": "Turnover Requirement Gap",
+    "evidence_gaps": [],
+    "extraction_warnings": [
+      "Offline mode: regex extraction only — LLM extraction disabled"
+    ],
+    "confidence": 0.92,
+    "confidence_reason": [
+      "4 of 4 mandatory requirements verified"
+    ],
+    "reasoning": "Recommendation: NO_BID. Qualification score: 50/100. Primary issue: Turnover Requirement Gap.",
+    "failed_mandatory_requirements": [
+      "req_9fb2f385",
+      "req_b603bd7c",
+      "req_48eb3226"
+    ],
+    "pipeline_duration_seconds": 0.011,
+    "created_at": "2026-06-25T20:08:23Z"
+  },
+  {
+    "recommendation_id": "rec_57695842",
+    "tender_id": "tender006",
+    "company_id": "APEX-INFRA-001",
+    "recommendation": "NO_BID",
+    "qualification_score": 50,
+    "competitive_strength": 20,
+    "incumbent_risk": 20,
+    "execution_risk": 25,
+    "value_score": 56,
+    "primary_bottleneck": "Turnover Requirement Gap",
+    "evidence_gaps": [],
+    "extraction_warnings": [
+      "Offline mode: regex extraction only — LLM extraction disabled"
+    ],
+    "confidence": 0.92,
+    "confidence_reason": [
+      "4 of 4 mandatory requirements verified"
+    ],
+    "reasoning": "Recommendation: NO_BID. Qualification score: 50/100. Primary issue: Turnover Requirement Gap.",
+    "failed_mandatory_requirements": [
+      "req_8151da4a",
+      "req_d094169e",
+      "req_4f372de9"
+    ],
+    "pipeline_duration_seconds": 0.009,
+    "created_at": "2026-06-25T20:08:31Z"
+  },
+  {
+    "recommendation_id": "rec_57ad182a",
+    "tender_id": "tender006",
+    "company_id": "APEX-INFRA-001",
+    "recommendation": "NO_BID",
+    "qualification_score": 50,
+    "competitive_strength": 20,
+    "incumbent_risk": 20,
+    "execution_risk": 25,
+    "value_score": 56,
+    "primary_bottleneck": "Turnover Requirement Gap",
+    "evidence_gaps": [],
+    "extraction_warnings": [
+      "Offline mode: regex extraction only — LLM extraction disabled"
+    ],
+    "confidence": 0.92,
+    "confidence_reason": [
+      "4 of 4 mandatory requirements verified"
+    ],
+    "reasoning": "Recommendation: NO_BID. Qualification score: 50/100. Primary issue: Turnover Requirement Gap.",
+    "failed_mandatory_requirements": [
+      "req_256c79b1",
+      "req_6c7f92dd",
+      "req_b755af6f"
+    ],
+    "pipeline_duration_seconds": 0.011,
+    "created_at": "2026-06-25T20:08:31Z"
+  },
+  {
+    "recommendation_id": "rec_71c4447d",
+    "tender_id": "tender007",
+    "company_id": "APEX-INFRA-001",
+    "recommendation": "BID",
+    "qualification_score": 100,
+    "competitive_strength": 75,
+    "incumbent_risk": 20,
+    "execution_risk": 10,
+    "value_score": 56,
+    "primary_bottleneck": null,
+    "evidence_gaps": [],
+    "extraction_warnings": [
+      "Offline mode: regex extraction only — LLM extraction disabled"
+    ],
+    "confidence": 1.0,
+    "confidence_reason": [
+      "1 of 1 mandatory requirements verified"
+    ],
+    "reasoning": "Recommendation: BID. Qualification score: 100/100.",
+    "failed_mandatory_requirements": [],
+    "pipeline_duration_seconds": 0.009,
+    "created_at": "2026-06-25T20:18:44Z"
+  },
+  {
+    "recommendation_id": "rec_3ced3409",
+    "tender_id": "tender008",
+    "company_id": "APEX-INFRA-001",
+    "recommendation": "NO_BID",
+    "qualification_score": 86,
+    "competitive_strength": 50,
+    "incumbent_risk": 20,
+    "execution_risk": 16,
+    "value_score": 60,
+    "primary_bottleneck": "Turnover Requirement Gap",
+    "evidence_gaps": [],
+    "extraction_warnings": [
+      "Offline mode: regex extraction only — LLM extraction disabled"
+    ],
+    "confidence": 0.9,
+    "confidence_reason": [
+      "5 of 5 mandatory requirements verified"
+    ],
+    "reasoning": "Recommendation: NO_BID. Qualification score: 86/100. Primary issue: Turnover Requirement Gap.",
+    "failed_mandatory_requirements": [
+      "req_1660a307"
+    ],
+    "pipeline_duration_seconds": 0.01,
+    "created_at": "2026-06-25T20:27:01Z"
+  },
+  {
+    "recommendation_id": "rec_dea2b562",
+    "tender_id": "tender009",
+    "company_id": "APEX-INFRA-001",
+    "recommendation": "NO_BID",
+    "qualification_score": 61,
+    "competitive_strength": 30,
+    "incumbent_risk": 20,
+    "execution_risk": 18,
+    "value_score": 57,
+    "primary_bottleneck": "Turnover Requirement Gap",
+    "evidence_gaps": [],
+    "extraction_warnings": [
+      "Offline mode: regex extraction only — LLM extraction disabled"
+    ],
+    "confidence": 0.86,
+    "confidence_reason": [
+      "7 of 7 mandatory requirements verified",
+      "Qualification score (61) is within 5 points of a decision threshold"
+    ],
+    "reasoning": "Recommendation: NO_BID. Qualification score: 61/100. Primary issue: Turnover Requirement Gap.",
+    "failed_mandatory_requirements": [
+      "req_5e759012",
+      "req_6a96c37a",
+      "req_02d5eb42",
+      "req_cfb7a334"
+    ],
+    "pipeline_duration_seconds": 0.011,
+    "created_at": "2026-06-25T20:40:59Z"
+  },
+  {
+    "recommendation_id": "rec_280e6546",
+    "tender_id": "tender010",
+    "company_id": "APEX-INFRA-001",
+    "recommendation": "NO_BID",
+    "qualification_score": 83,
+    "competitive_strength": 58,
+    "incumbent_risk": 20,
+    "execution_risk": 19,
+    "value_score": 60,
+    "primary_bottleneck": "Experience Requirement Gap",
+    "evidence_gaps": [],
+    "extraction_warnings": [
+      "Offline mode: regex extraction only — LLM extraction disabled"
+    ],
+    "confidence": 0.87,
+    "confidence_reason": [
+      "4 of 4 mandatory requirements verified",
+      "Qualification score (83) is within 5 points of a decision threshold"
+    ],
+    "reasoning": "Recommendation: NO_BID. Qualification score: 83/100. Primary issue: Experience Requirement Gap.",
+    "failed_mandatory_requirements": [
+      "req_70e987e6"
+    ],
+    "pipeline_duration_seconds": 0.012,
+    "created_at": "2026-06-25T20:51:57Z"
   }
 ]

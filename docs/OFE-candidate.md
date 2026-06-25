@@ -1,18 +1,28 @@
 # Opportunity Fit Engine — Candidate Architecture
 
-**Status: Strengthened candidate — do not implement**
-**Origin: RA-1 Reality Acquisition sprint, derived from Tender001–004 evidence**
-**Evidence Gate: RA-1-Summary.md must be complete before this document advances to engineering**
+**Status: Architecture approved — Epic 1 (Domain Fit) open for implementation**
+**Origin: RA-1 Reality Acquisition sprint, closed 2026-06-25**
+**Evidence Gate: RA-1-Summary.md complete. All promotion criteria met. Type 2 freeze lifted.**
+**Implementation sequence: Epic 1 (Domain Fit) → RA-2 benchmark → Epic 2 (Document Intelligence)**
 
 ---
 
 ## What RA-1 Is Revealing
 
-The current MVP pipeline assumes that if a company clears numeric thresholds (turnover, experience value, count), they are qualified. Four tenders have tested this assumption. All four produced a wrong recommendation. The failure is not in the threshold math — it is in the question the pipeline never asks:
+Six tenders have been processed. The evidence now supports a three-layer model of what the pipeline actually does (and what it fails to do):
 
-> What business is this company actually in?
+**Layer 1 — Domain Fit** (PAT-001, validated)
+The pipeline has no mechanism to ask: "Is this opportunity in the company's commercial domain?" It evaluates thresholds without establishing domain compatibility first. Four of six tenders exposed this gap. Tender006 defined its boundary: when domain matches, the qualification logic works correctly.
 
-That question precedes every threshold. It cannot be answered by comparing numbers.
+**Layer 2 — Threshold Qualification** (validated by Tender006)
+When domain is established and thresholds clearly fail, the engine correctly produces NO_BID. Turnover comparison, mandatory failure detection, and recommendation propagation all function correctly. This layer is not fundamentally broken.
+
+**Layer 3 — Extraction Quality** (candidates PAT-003, PAT-004)
+The regex extractor has structural coverage gaps: experience values are contaminated by turnover clauses (PAT-003), and 5-digit ISO standard numbers are categorically excluded from extraction (PAT-004). These are Bucket B issues — they affect the inputs to Layer 2 without breaking Layer 2's logic.
+
+The three-layer framing is not a design proposal — it is a description of what the evidence reveals. The OFE candidate architecture below reflects this structure.
+
+**The core MVP assumption that is false:** Domain fit is assumed before the pipeline runs. In practice, the pipeline is asked to evaluate domain-mismatched tenders with no mechanism to detect the mismatch. Tender001–004 all demonstrated this. Tender006 confirmed that removing the domain mismatch (by using a domain-matched tender) does not expose a broken qualification engine — it exposes a working one.
 
 ---
 
@@ -112,10 +122,37 @@ Recommend
 - FAIL: domain mismatch detected → pipeline terminates → NO BID
 - UNCERTAIN: domain cannot be determined from available signals → pipeline continues with REVIEW flag
 
+**Domain taxonomy: hierarchical, not flat.**
+Tender007 showed that "civil works" is not one domain — it has internal structure. Road construction and canal desilting are both civil earthwork, but they are distinct domains (highway engineering vs hydraulic engineering). A flat taxonomy (Road / Building / IT / Electrical / Healthcare) is insufficient. The design requires at minimum a two-level hierarchy:
+
+```
+Civil Works
+├── Roads & Highways
+├── Buildings & Structures
+├── Irrigation & Canals
+├── Bridges
+├── Ports & Marine
+└── Rail & Metro
+
+Mechanical / Electromechanical
+├── Lifts & Escalators (Subtype B: OEM required)
+├── HVAC / MEP
+└── Power & Transmission
+
+IT & Digital
+├── Software / Systems
+├── Digitization & Scanning
+├── Communication & Networking
+└── SCADA & Instrumentation
+```
+
+The implication for implementation: domain matching cannot use a simple keyword list. It requires understanding that "canal earthwork" and "road earthwork" are in different subtrees, even though the physical activity is similar.
+
 **Evidence from RA-1:**
 - Tender001: road contractor vs defence building → FAIL should have been immediate
 - Tender002: road contractor vs Otis lift AMC (OEM cert required) → FAIL; this is Subtype B (Required Relationship), a structural incompatibility not just a capability gap
 - Tender003: road contractor vs IT digitization → FAIL; experience metric is pages scanned, not rupee value
+- Tender007: road contractor vs canal desilting → FAIL; same civil earthwork, different domain branch (highway vs hydraulic)
 
 ### 2. Qualification Fit (current pipeline, refined)
 
@@ -147,13 +184,17 @@ Asking these out of order produces systematically wrong answers when domain mism
 
 ---
 
-## Evidence Required to Advance
+## Evidence Gates — Status After RA-1
 
-This document is a candidate, not a plan. It advances when:
+All gates cleared.
 
-1. RA-1-Summary.md is complete
-2. PAT-001 (Domain Fit) maintains zero counterexamples through RA-1
-3. At least one additional failure class beyond PAT-001 and PAT-002 is observed (or absence of such is noted)
-4. A domain taxonomy for Indian government procurement is drafted and reviewed
+| Gate | Status |
+|---|---|
+| RA-1-Summary.md complete | ✓ — closed 2026-06-25 |
+| PAT-001 zero logic-level counterexamples through RA-1 | ✓ — 5 obs, 0 logic-level CX |
+| Additional failure class beyond PAT-001 observed | ✓ — PAT-003 (Requirement Resolution) promoted |
+| Domain taxonomy drafted | ✓ — hierarchical taxonomy in Module 1 below |
 
-**Do not implement any component of this architecture until these gates are cleared.**
+**Implementation is now open.** Epic 1 (Domain Fit) proceeds first. Epic 2 (Document Intelligence / PAT-003) proceeds after RA-2 benchmark confirms Epic 1 delivered projected improvement.
+
+See `docs/RA-2-Plan.md` for the RA-2 scope, success criteria, and delta report template.

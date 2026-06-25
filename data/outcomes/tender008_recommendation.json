@@ -1,0 +1,26 @@
+{
+  "recommendation_id": "rec_3ced3409",
+  "tender_id": "tender008",
+  "company_id": "APEX-INFRA-001",
+  "recommendation": "NO_BID",
+  "qualification_score": 86,
+  "competitive_strength": 50,
+  "incumbent_risk": 20,
+  "execution_risk": 16,
+  "value_score": 60,
+  "primary_bottleneck": "Turnover Requirement Gap",
+  "evidence_gaps": [],
+  "extraction_warnings": [
+    "Offline mode: regex extraction only — LLM extraction disabled"
+  ],
+  "confidence": 0.9,
+  "confidence_reason": [
+    "5 of 5 mandatory requirements verified"
+  ],
+  "reasoning": "Recommendation: NO_BID. Qualification score: 86/100. Primary issue: Turnover Requirement Gap.",
+  "failed_mandatory_requirements": [
+    "req_1660a307"
+  ],
+  "pipeline_duration_seconds": 0.01,
+  "created_at": "2026-06-25T20:27:01Z"
+}
