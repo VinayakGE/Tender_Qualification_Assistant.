@@ -121,10 +121,37 @@ Recommend
 - FAIL: domain mismatch detected → pipeline terminates → NO BID
 - UNCERTAIN: domain cannot be determined from available signals → pipeline continues with REVIEW flag
 
+**Domain taxonomy: hierarchical, not flat.**
+Tender007 showed that "civil works" is not one domain — it has internal structure. Road construction and canal desilting are both civil earthwork, but they are distinct domains (highway engineering vs hydraulic engineering). A flat taxonomy (Road / Building / IT / Electrical / Healthcare) is insufficient. The design requires at minimum a two-level hierarchy:
+
+```
+Civil Works
+├── Roads & Highways
+├── Buildings & Structures
+├── Irrigation & Canals
+├── Bridges
+├── Ports & Marine
+└── Rail & Metro
+
+Mechanical / Electromechanical
+├── Lifts & Escalators (Subtype B: OEM required)
+├── HVAC / MEP
+└── Power & Transmission
+
+IT & Digital
+├── Software / Systems
+├── Digitization & Scanning
+├── Communication & Networking
+└── SCADA & Instrumentation
+```
+
+The implication for implementation: domain matching cannot use a simple keyword list. It requires understanding that "canal earthwork" and "road earthwork" are in different subtrees, even though the physical activity is similar.
+
 **Evidence from RA-1:**
 - Tender001: road contractor vs defence building → FAIL should have been immediate
 - Tender002: road contractor vs Otis lift AMC (OEM cert required) → FAIL; this is Subtype B (Required Relationship), a structural incompatibility not just a capability gap
 - Tender003: road contractor vs IT digitization → FAIL; experience metric is pages scanned, not rupee value
+- Tender007: road contractor vs canal desilting → FAIL; same civil earthwork, different domain branch (highway vs hydraulic)
 
 ### 2. Qualification Fit (current pipeline, refined)
 
