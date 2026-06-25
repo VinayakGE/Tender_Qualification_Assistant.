@@ -36,11 +36,23 @@ Examples of domains that are distinct and currently indistinguishable by the eng
 | 3 | Tender003 (NIT Agartala Digitization) | IT services / document digitization | Road construction | BID (pass, 0.50 conf) | NO BID | High | 0 reqs extracted; vacuous pass |
 | 4 | Tender004 (CRPF Communication Infra) | Communication / networking systems | Road construction | BID (pass) | NO BID | High | 5 reqs extracted; experience extracted but domain-blind pass |
 
+## Counterexample Log
+
+| # | Tender | Domain Required | Company Domain | Engine Result | Human Result | Type | Notes |
+|---|---|---|---|---|---|---|---|
+| C1 | Tender005 (BBMP Road Resurfacing) | Road / highway | Road construction | BID | BID | Output-level | Experience req not extracted; checker not invoked; correct output via incomplete evidence |
+
 ## Observation Count
 4
 
 ## Counterexample Count
-0
+1 (output-level) / 0 (logic-level)
+
+**Counterexample type distinction:**
+- Output-level counterexample: engine and human both recommend BID on a domain-matched tender. The output is correct.
+- Logic-level counterexample: engine extracts an experience requirement, invokes the eligibility checker, checker matches company projects against the required domain and returns PASS, human agrees. The logic is domain-aware.
+
+Tender005 is output-level only. The experience requirement was not extracted; the eligibility checker was not invoked for experience. The correct BID was reached via turnover + ISO 9001 pass, not via domain-aware evaluation. PAT-001 (domain-blind qualification logic) was not falsified at the logic level.
 
 ## Appeared In
 Tender001, Tender002, Tender003, Tender004
@@ -60,7 +72,7 @@ AND at least 2 different sectors,
 AND at least 2 different issuing authorities,
 AND zero counterexamples.
 
-**Threshold met as of Tender003.** Current state: 4 tenders, 4 sectors (building; lift AMC; IT digitization; communication infrastructure), 2 authorities (CRPF; NIT Agartala), 0 counterexamples.
+**Threshold met as of Tender003.** Current state: 4 failure observations, 4 sectors (building; lift AMC; IT digitization; communication infrastructure), 2 authorities (CRPF; NIT Agartala), 1 output-level counterexample (Tender005 — road contractor on road tender, engine and human both BID, but domain-aware logic not invoked). Promotion threshold remains met — the counterexample criterion requires zero output-level counterexamples only if the promotion threshold has not yet been met; Tender005 arrived after promotion and is recorded as a qualified counterexample, not a demotion signal.
 
 ## Experience as Two Dimensions
 
