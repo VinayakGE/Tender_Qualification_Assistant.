@@ -110,6 +110,29 @@ Ranked by: Impact first, then frequency.
 
 ---
 
+## Evidence Yield
+
+```
+High-impact findings
+────────────────────  =  ___  / ___  =  ___
+Engineering changes proposed
+```
+
+**Interpretation:**
+- Ratio > 1 — every engineering change is justified by multiple real findings. Good.
+- Ratio ≈ 1 — one finding per change. Acceptable.
+- Ratio < 0.5 — more changes than findings. Stop. Gather more tenders before engineering.
+
+Recommendation Agreement Rate (first product KPI):
+
+```
+Engine == Human
+───────────────  =  ___  / 10  =  ___ %
+Total Tenders
+```
+
+---
+
 ## Recommendation
 
 <!-- One paragraph. What does this sprint tell us about what to build next? -->

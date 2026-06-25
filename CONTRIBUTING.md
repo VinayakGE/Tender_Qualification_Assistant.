@@ -75,6 +75,48 @@ test(qualification): add boundary test for 60-score threshold
 
 Keep the subject line under 72 characters. Use the body for _why_, not _what_.
 
+## Evidence-Linked Engineering (Post-RA-1 Rule)
+
+Every code change that modifies pipeline behavior must reference the observed evidence that justified it. Use this structure in the commit body:
+
+```
+Finding:
+<what was observed across multiple tenders>
+
+Evidence:
+<N/10 tenders affected, Tender IDs>
+
+Impact:
+High / Medium / Low — <what the failure actually costs>
+
+Change:
+<what was changed and why this addresses the root cause>
+```
+
+**Example:**
+
+```
+fix(extractor): scan Annexure B for JV eligibility clauses
+
+Finding:
+JV eligibility clauses consistently appear in Annexure B, not the
+main tender body. The extractor missed these in all cases.
+
+Evidence:
+3/10 tenders (Tender003, Tender007, Tender009). All three were road
+construction tenders issued by state highway authorities.
+
+Impact:
+High — misclassified these tenders as eligible when JV was mandatory.
+Would have triggered disqualification post-submission.
+
+Change:
+Extractor now checks for Annexure B section header and includes its
+text in the eligibility extraction pass.
+```
+
+A commit that says "improved parser" with no evidence reference will be rejected in PR review. Opinion without observation has no weight here.
+
 ## Prompts as Versioned Artifacts
 
 Prompts in `prompts/` are first-class code artifacts, not just configuration:
