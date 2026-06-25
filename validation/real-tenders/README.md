@@ -17,17 +17,22 @@ Pattern analysis happens after all 10 are complete.
 
 ## Tracking Table
 
-| # | Tender ID | Portal | Parser | Extraction | Recommendation | Duration |
-|---|---|---|---|---|---|---|
-| 1 | — | — | — | — | — | — |
-| 2 | — | — | — | — | — | — |
-| 3 | — | — | — | — | — | — |
-| 4 | — | — | — | — | — | — |
-| 5 | — | — | — | — | — | — |
-| 6 | — | — | — | — | — | — |
-| 7 | — | — | — | — | — | — |
-| 8 | — | — | — | — | — | — |
-| 9 | — | — | — | — | — | — |
-| 10 | — | — | — | — | — | — |
+| # | Tender ID | Portal | Parser | Extraction | Engine | Expected | Match | Duration |
+|---|---|---|---|---|---|---|---|---|
+| 1 | — | — | — | — | — | Unknown | — | — |
+| 2 | — | — | — | — | — | Unknown | — | — |
+| 3 | — | — | — | — | — | Unknown | — | — |
+| 4 | — | — | — | — | — | Unknown | — | — |
+| 5 | — | — | — | — | — | Unknown | — | — |
+| 6 | — | — | — | — | — | Unknown | — | — |
+| 7 | — | — | — | — | — | Unknown | — | — |
+| 8 | — | — | — | — | — | Unknown | — | — |
+| 9 | — | — | — | — | — | Unknown | — | — |
+| 10 | — | — | — | — | — | Unknown | — | — |
+
+**Columns:**
+- **Engine** — what the pipeline produced (BID / REVIEW / NO_BID)
+- **Expected** — your judgment after reading the tender manually (filled in *after* the engine runs)
+- **Match** — Yes / No / N/A (N/A when engine failed to produce a recommendation)
 
 Update this table after every run. The table is the sprint deliverable.

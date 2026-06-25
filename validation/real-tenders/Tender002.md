@@ -29,9 +29,20 @@ python scripts/run_pipeline.py \
 | Manual edits needed | 0 |
 | Recommendation generated | Yes / No |
 | Recommendation | BID / REVIEW / NO_BID / — |
+| Expected Recommendation | Unknown |
 | Qualification score | /100 |
 | Incumbent risk | /100 |
 | Pipeline duration | seconds |
+
+## Failure Bucket
+
+<!-- If the pipeline failed or the recommendation was wrong, classify the root cause:
+     A — Engineering (parser crash, OCR failure, pipeline error)
+     B — Extraction (missed clause, wrong threshold, wrong category)
+     C — Decision (correct extraction, wrong recommendation)
+     Leave blank if pipeline succeeded and recommendation was correct. -->
+
+Bucket: —
 
 ## Observations
 
