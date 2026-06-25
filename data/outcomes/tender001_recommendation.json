@@ -1,0 +1,24 @@
+{
+  "recommendation_id": "rec_4a1c2dba",
+  "tender_id": "tender001",
+  "company_id": "APEX-INFRA-001",
+  "recommendation": "BID",
+  "qualification_score": 100,
+  "competitive_strength": 75,
+  "incumbent_risk": 20,
+  "execution_risk": 13,
+  "value_score": 59,
+  "primary_bottleneck": null,
+  "evidence_gaps": [],
+  "extraction_warnings": [
+    "Offline mode: regex extraction only — LLM extraction disabled"
+  ],
+  "confidence": 1.0,
+  "confidence_reason": [
+    "4 of 4 mandatory requirements verified"
+  ],
+  "reasoning": "Recommendation: BID. Qualification score: 100/100.",
+  "failed_mandatory_requirements": [],
+  "pipeline_duration_seconds": 0.015,
+  "created_at": "2026-06-25T16:56:23Z"
+}
