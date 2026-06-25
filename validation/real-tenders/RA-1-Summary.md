@@ -139,8 +139,22 @@ Total Tenders
 
 ---
 
+## Evidence Stability Check
+
+After completing this report, ask:
+
+> Did these 10 tenders produce genuinely new classes of findings,
+> or did the last few tenders repeat patterns already seen in the first few?
+
+- [ ] New finding classes in tenders 7–10 → evidence base still expanding → continue collecting (RA-2)
+- [ ] Tenders 7–10 repeated patterns from 1–6 → evidence base stabilizing → shift to qualification and decision quality
+
+This question determines whether RA-2 should begin immediately or whether the current evidence is sufficient to open an engineering sprint.
+
+---
+
 ## Decision
 
-- [ ] Open development — proceed to engineering sprint based on priorities above
-- [ ] Collect more tenders — sample size too small to prioritize
+- [ ] Open development — evidence base stable, priorities clear
+- [ ] Begin RA-2 — new finding classes still appearing, sample more authorities
 - [ ] Customer interview first — unclear if these failures matter to real users
