@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tender-qualification-assistant/schemas/company.schema.json",
+  "title": "CompanyProfile",
+  "description": "A company's qualification profile used for tender eligibility checking",
+  "type": "object",
+  "required": ["company_id", "name", "annual_turnover_inr_crores", "years_in_operation", "certifications", "completed_projects"],
+  "properties": {
+    "company_id": {
+      "type": "string",
+      "description": "Unique identifier for this company"
+    },
+    "name": {
+      "type": "string",
+      "description": "Legal name of the company"
+    },
+    "pan": {
+      "type": ["string", "null"],
+      "pattern": "^[A-Z]{5}[0-9]{4}[A-Z]$",
+      "description": "Permanent Account Number"
+    },
+    "gstin": {
+      "type": ["string", "null"],
+      "description": "GST Identification Number"
+    },
+    "annual_turnover_inr_crores": {
+      "type": "array",
+      "description": "Annual turnover for the last N years in INR Crores, most recent first",
+      "items": {
+        "type": "number",
+        "minimum": 0
+      },
+      "minItems": 1,
+      "maxItems": 5
+    },
+    "years_in_operation": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of years the company has been in operation"
+    },
+    "certifications": {
+      "type": "array",
+      "description": "List of certifications held by the company",
+      "items": {
+        "type": "string"
+      }
+    },
+    "completed_projects": {
+      "type": "array",
+      "description": "List of completed projects",
+      "items": {
+        "type": "object",
+        "required": ["project_id", "title", "contract_value_inr_crores", "completion_date"],
+        "properties": {
+          "project_id": { "type": "string" },
+          "title": { "type": "string" },
+          "client": { "type": ["string", "null"] },
+          "sector": { "type": ["string", "null"] },
+          "contract_value_inr_crores": { "type": "number", "minimum": 0 },
+          "duration_months": { "type": ["integer", "null"], "minimum": 1 },
+          "completion_date": { "type": "string", "format": "date" },
+          "has_completion_certificate": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "financial_net_worth_inr_crores": {
+      "type": ["number", "null"],
+      "description": "Net worth as per latest audited balance sheet, in INR Crores"
+    },
+    "working_capital_inr_crores": {
+      "type": ["number", "null"],
+      "description": "Working capital (current assets minus current liabilities), in INR Crores"
+    },
+    "employees": {
+      "type": ["integer", "null"],
+      "minimum": 0,
+      "description": "Total number of employees"
+    },
+    "registered_address": {
+      "type": ["string", "null"],
+      "description": "Registered office address"
+    },
+    "contact_email": {
+      "type": ["string", "null"],
+      "format": "email"
+    },
+    "priority_sectors": {
+      "type": "array",
+      "description": "Sectors the company prioritizes for tendering",
+      "items": { "type": "string" }
+    },
+    "blacklisted": {
+      "type": ["boolean", "null"],
+      "description": "Whether the company is blacklisted by any government authority"
+    },
+    "empanelled_with": {
+      "type": "array",
+      "description": "Government bodies or PSUs with which the company is empanelled",
+      "items": { "type": "string" }
+    },
+    "profile_last_updated": {
+      "type": ["string", "null"],
+      "format": "date",
+      "description": "Date when this profile was last reviewed and updated"
+    }
+  },
+  "additionalProperties": false
+}

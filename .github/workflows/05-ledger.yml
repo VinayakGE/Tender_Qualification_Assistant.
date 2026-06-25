@@ -1,0 +1,61 @@
+name: "05 - Ledger Update"
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'decision-ledger.json'
+  workflow_dispatch:
+
+jobs:
+  ledger-report:
+    name: Generate ledger summary report
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate report
+        env:
+          ANTHROPIC_API_KEY: "not-needed-for-report"
+        run: |
+          mkdir -p data/outcomes
+          python scripts/export_reports.py \
+            --output data/outcomes/latest-decisions-report.md \
+            --last 50
+
+      - name: Commit updated report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/outcomes/latest-decisions-report.md || true
+          git diff --staged --quiet || git commit -m "docs(ledger): update decisions summary report [automated]"
+          git push || true
+
+      - name: Print summary
+        run: |
+          echo "=== Latest Decisions ==="
+          python -c "
+          import sys
+          sys.path.insert(0, '.')
+          from src.ledger.decisions import DecisionLedger
+          import os
+          os.environ.setdefault('ANTHROPIC_API_KEY', 'placeholder')
+          ledger = DecisionLedger()
+          entries, total = ledger.read_paginated(page=1, page_size=5)
+          print(f'Total decisions: {total}')
+          for e in entries:
+              print(f'  {e[\"recommendation\"]:8s} {e[\"tender_id\"]} (score: {e[\"qualification_score\"]})')
+          " || true

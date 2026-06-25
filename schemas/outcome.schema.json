@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tender-qualification-assistant/schemas/outcome.schema.json",
+  "title": "Outcome",
+  "description": "The actual bid outcome recorded against a recommendation, used for accuracy measurement and learning",
+  "type": "object",
+  "required": ["outcome_id", "recommendation_id", "tender_id", "company_id", "bid_submitted", "recorded_at"],
+  "properties": {
+    "outcome_id": {
+      "type": "string",
+      "description": "Unique identifier for this outcome record"
+    },
+    "recommendation_id": {
+      "type": "string",
+      "description": "The recommendation this outcome corresponds to"
+    },
+    "tender_id": {
+      "type": "string",
+      "description": "The tender that was bid on (or not)"
+    },
+    "company_id": {
+      "type": "string",
+      "description": "The company that bid (or did not bid)"
+    },
+    "system_recommendation": {
+      "type": ["string", "null"],
+      "enum": ["BID", "REVIEW", "NO_BID", null],
+      "description": "What the system recommended"
+    },
+    "human_decision": {
+      "type": ["string", "null"],
+      "enum": ["BID", "NO_BID", null],
+      "description": "What the bid team actually decided (may differ from system recommendation)"
+    },
+    "bid_submitted": {
+      "type": "boolean",
+      "description": "Whether a bid was actually submitted"
+    },
+    "bid_won": {
+      "type": ["boolean", "null"],
+      "description": "Whether the submitted bid was won. Null if bid was submitted but result not yet known."
+    },
+    "contract_value_inr": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Actual contract value in INR if won"
+    },
+    "disqualified_at_evaluation": {
+      "type": ["boolean", "null"],
+      "description": "True if the bid was rejected during pre-qualification evaluation (validation check)"
+    },
+    "loss_reason": {
+      "type": ["string", "null"],
+      "description": "If bid was lost, the stated or inferred reason"
+    },
+    "notes": {
+      "type": ["string", "null"],
+      "description": "Free-text notes about this outcome"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when this outcome was recorded (ISO 8601)"
+    }
+  },
+  "additionalProperties": false
+}

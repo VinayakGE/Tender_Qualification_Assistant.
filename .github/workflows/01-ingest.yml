@@ -1,0 +1,53 @@
+name: "01 - Tender Ingestion"
+
+# NOTE: This workflow is currently a STUB.
+# Phase 7 will add real portal integration (CPPP, GeM, state portals).
+# Currently, it runs the local ingestion script which scans a configured
+# directory for new tender PDFs and commits them to data/raw-tenders/.
+
+on:
+  schedule:
+    # Run daily at 6am UTC (11:30am IST)
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      input_dir:
+        description: 'Directory to scan for PDFs (relative to repo root)'
+        required: false
+        default: 'data/sample-data'
+
+jobs:
+  ingest:
+    name: Scan for new tender PDFs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run ingestion script
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          INPUT_DIR="${{ github.event.inputs.input_dir || 'data/sample-data' }}"
+          python scripts/ingest_tenders.py --input "$INPUT_DIR" || true
+          echo "Ingestion complete (stub)"
+
+      - name: Commit new tenders if any
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/raw-tenders/ data/incoming/ || true
+          git diff --staged --quiet || git commit -m "chore: ingest new tender PDFs [automated]"
+          git push || true

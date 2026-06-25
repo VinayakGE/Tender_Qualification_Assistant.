@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tender-qualification-assistant/schemas/tender.schema.json",
+  "title": "Tender",
+  "description": "A parsed government tender document",
+  "type": "object",
+  "required": ["tender_id", "title", "authority", "requirements", "parsed_at"],
+  "properties": {
+    "tender_id": {
+      "type": "string",
+      "description": "Unique identifier for this tender, derived from the document or filename"
+    },
+    "title": {
+      "type": "string",
+      "description": "Full title of the tender as stated in the document"
+    },
+    "authority": {
+      "type": "string",
+      "description": "Issuing authority or procuring entity name"
+    },
+    "published_date": {
+      "type": ["string", "null"],
+      "format": "date",
+      "description": "Date the tender was published (YYYY-MM-DD)"
+    },
+    "submission_deadline": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "Tender submission deadline (ISO 8601)"
+    },
+    "contract_value_inr": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Estimated contract value in Indian Rupees"
+    },
+    "contract_duration_months": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "description": "Contract duration in months"
+    },
+    "tender_type": {
+      "type": ["string", "null"],
+      "enum": ["works", "goods", "services", "composite", null],
+      "description": "Nature of the procurement"
+    },
+    "document_url": {
+      "type": ["string", "null"],
+      "format": "uri",
+      "description": "Original document URL if obtained from a portal"
+    },
+    "source_file": {
+      "type": ["string", "null"],
+      "description": "Original filename of the source PDF"
+    },
+    "requirements": {
+      "type": "array",
+      "description": "Structured list of all extracted requirements",
+      "items": {
+        "$ref": "requirement.schema.json"
+      }
+    },
+    "raw_text_length": {
+      "type": ["integer", "null"],
+      "description": "Character count of the extracted raw text (useful for diagnostics)"
+    },
+    "extraction_method": {
+      "type": ["string", "null"],
+      "enum": ["pdfplumber", "ocr", "combined", null],
+      "description": "How text was extracted from the PDF"
+    },
+    "parsed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when this tender was parsed (ISO 8601)"
+    }
+  },
+  "additionalProperties": false
+}

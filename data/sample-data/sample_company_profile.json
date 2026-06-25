@@ -1,0 +1,73 @@
+{
+  "company_id": "SAMPLE-001",
+  "name": "Apex Infrastructure Pvt Ltd",
+  "pan": "AABCA1234F",
+  "gstin": "27AABCA1234F1Z5",
+  "annual_turnover_inr_crores": [42, 38, 51],
+  "years_in_operation": 12,
+  "certifications": [
+    "ISO 9001:2015",
+    "ISO 14001:2015"
+  ],
+  "completed_projects": [
+    {
+      "project_id": "PROJ-001",
+      "title": "Supply and Installation of Water Treatment Plant",
+      "client": "Pune Municipal Corporation",
+      "sector": "water_treatment",
+      "contract_value_inr_crores": 18.5,
+      "duration_months": 24,
+      "completion_date": "2022-03-15",
+      "has_completion_certificate": true
+    },
+    {
+      "project_id": "PROJ-002",
+      "title": "Civil Works for Industrial Estate Road Network",
+      "client": "MIDC Maharashtra",
+      "sector": "civil_works",
+      "contract_value_inr_crores": 12.2,
+      "duration_months": 18,
+      "completion_date": "2021-09-30",
+      "has_completion_certificate": true
+    },
+    {
+      "project_id": "PROJ-003",
+      "title": "Construction of Administrative Building",
+      "client": "ONGC Videsh Ltd",
+      "sector": "building_construction",
+      "contract_value_inr_crores": 9.8,
+      "duration_months": 30,
+      "completion_date": "2023-01-20",
+      "has_completion_certificate": true
+    },
+    {
+      "project_id": "PROJ-004",
+      "title": "Electrical and Mechanical Works for Pumping Station",
+      "client": "BWSSB Karnataka",
+      "sector": "water_treatment",
+      "contract_value_inr_crores": 7.4,
+      "duration_months": 12,
+      "completion_date": "2020-11-05",
+      "has_completion_certificate": true
+    },
+    {
+      "project_id": "PROJ-005",
+      "title": "Solar Power Plant Installation",
+      "client": "NTPC Renewable Energy Ltd",
+      "sector": "renewable_energy",
+      "contract_value_inr_crores": 6.1,
+      "duration_months": 8,
+      "completion_date": "2023-07-12",
+      "has_completion_certificate": false
+    }
+  ],
+  "financial_net_worth_inr_crores": 18,
+  "working_capital_inr_crores": 8.5,
+  "employees": 340,
+  "registered_address": "Survey No 45, MIDC Industrial Area, Pune 411019, Maharashtra",
+  "contact_email": "bd@apexinfra.example.com",
+  "priority_sectors": ["water_treatment", "civil_works", "building_construction"],
+  "blacklisted": false,
+  "empanelled_with": ["CPWD", "PWD Maharashtra", "MIDC"],
+  "profile_last_updated": "2024-06-01"
+}
