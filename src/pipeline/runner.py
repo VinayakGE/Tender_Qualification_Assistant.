@@ -1,10 +1,7 @@
 """Pipeline orchestrator — runs all stages in order for a single tender."""
 
-import time
 from pathlib import Path
 
-from src.bottlenecks.classifier import BottleneckClassifier
-from src.extractor.clause_extractor import ClauseExtractor
 from src.extractor.metadata import MetadataExtractor
 from src.extractor.requirement_extractor import RequirementExtractor
 from src.ledger.decisions import DecisionLedger
@@ -98,32 +95,48 @@ class PipelineRunner:
             raise RuntimeError(f"Parser failed: {exc}") from exc
         run.add_stage(stage)
 
-        # Save parsed text
-        save_json(
-            {"tender_id": tender_id, "clean_text": clean_text, "parsed_at": now_iso()},
-            self.config.PARSED_DIR / f"{tender_id}.json",
-        )
+        # Save parsed text (version metadata added after extraction)
+        _parsed_payload = {"tender_id": tender_id, "clean_text": clean_text, "parsed_at": now_iso()}
 
         # Stage 2: Extract requirements
         stage = PipelineStage("extractor").start({"text_chars": len(clean_text)})
         try:
             metadata = MetadataExtractor().extract(clean_text)
-            requirements = RequirementExtractor().extract(clean_text, tender_id=tender_id)
-            stage.complete({"requirements_found": len(requirements)})
+            extraction = RequirementExtractor().extract(clean_text, tender_id=tender_id)
+            requirements = extraction.requirements
+            extraction_warnings = extraction.warnings
+            stage.complete(
+                {
+                    "requirements_found": len(requirements),
+                    "extraction_warnings": len(extraction_warnings),
+                }
+            )
         except Exception as exc:
             stage.fail(str(exc))
             run.add_stage(stage)
             raise RuntimeError(f"Extractor failed: {exc}") from exc
         run.add_stage(stage)
 
+        # Save parsed text + version provenance
+        _parsed_payload.update(
+            {
+                "extractor_version": extraction.extractor_version,
+                "prompt_version": extraction.prompt_version,
+                "schema_version": extraction.schema_version,
+            }
+        )
+        save_json(_parsed_payload, self.config.PARSED_DIR / f"{tender_id}.json")
+
         # Stage 3: Qualify
         stage = PipelineStage("qualification").start({"requirements": len(requirements)})
         try:
             eligibility_result = EligibilityChecker().check(requirements, company_profile)
-            stage.complete({
-                "overall_pass": eligibility_result.overall_pass,
-                "mandatory_fails": eligibility_result.mandatory_fail_count,
-            })
+            stage.complete(
+                {
+                    "overall_pass": eligibility_result.overall_pass,
+                    "mandatory_fails": eligibility_result.mandatory_fail_count,
+                }
+            )
         except Exception as exc:
             stage.fail(str(exc))
             run.add_stage(stage)
@@ -144,6 +157,7 @@ class PipelineRunner:
                 contract_duration_months=metadata.contract_duration_months,
             )
             from src.scoring.qualification_score import QualificationScorer
+
             qual_score = QualificationScorer().score(eligibility_result)
             execution_risk = ExecutionRiskScorer().score(
                 tender_text=clean_text,
@@ -160,11 +174,13 @@ class PipelineRunner:
                 competitive_strength=competitive_strength,
                 incumbent_risk=incumbent_risk,
             )
-            stage.complete({
-                "qualification_score": qual_score,
-                "competitive_strength": competitive_strength,
-                "incumbent_risk": incumbent_risk,
-            })
+            stage.complete(
+                {
+                    "qualification_score": qual_score,
+                    "competitive_strength": competitive_strength,
+                    "incumbent_risk": incumbent_risk,
+                }
+            )
         except Exception as exc:
             stage.fail(str(exc))
             run.add_stage(stage)
@@ -182,6 +198,7 @@ class PipelineRunner:
                 incumbent_risk=incumbent_risk,
                 execution_risk=execution_risk,
                 value_score=value_score,
+                extraction_warnings=extraction_warnings,
                 pipeline_duration_seconds=run.total_duration_seconds,
             )
             stage.complete({"recommendation": recommendation.recommendation})

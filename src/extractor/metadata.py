@@ -1,8 +1,7 @@
 """Extract tender metadata (title, authority, dates, value) from tender text."""
 
 import re
-from dataclasses import dataclass, field
-from datetime import datetime
+from dataclasses import dataclass
 
 from src.utils.logger import get_logger
 
@@ -10,9 +9,9 @@ logger = get_logger(__name__)
 
 # Common date formats in Indian government tenders
 DATE_PATTERNS = [
-    r"\b(\d{1,2})[/-](\d{1,2})[/-](\d{4})\b",         # DD/MM/YYYY or DD-MM-YYYY
-    r"\b(\d{4})[/-](\d{1,2})[/-](\d{1,2})\b",          # YYYY-MM-DD
-    r"\b(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})\b",          # 15 June 2024
+    r"\b(\d{1,2})[/-](\d{1,2})[/-](\d{4})\b",  # DD/MM/YYYY or DD-MM-YYYY
+    r"\b(\d{4})[/-](\d{1,2})[/-](\d{1,2})\b",  # YYYY-MM-DD
+    r"\b(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})\b",  # 15 June 2024
 ]
 
 # Patterns for contract value extraction
@@ -91,7 +90,9 @@ class MetadataExtractor:
             return m.group(1).strip()
 
         # Fallback: first non-empty line after the document header
-        lines = [l.strip() for l in text[:1000].split("\n") if l.strip() and len(l.strip()) > 10]
+        lines = [
+            ln.strip() for ln in text[:1000].split("\n") if ln.strip() and len(ln.strip()) > 10
+        ]
         return lines[0][:120] if lines else "Unknown Title"
 
     def _extract_authority(self, text: str) -> str:

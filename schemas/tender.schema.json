@@ -72,6 +72,22 @@
       "type": "string",
       "format": "date-time",
       "description": "Timestamp when this tender was parsed (ISO 8601)"
+    },
+    "emd": {
+      "type": ["number", "null"],
+      "minimum": 0,
+      "description": "Earnest Money Deposit in Indian Rupees"
+    },
+    "department": {
+      "type": ["string", "null"],
+      "description": "Department or division within the issuing authority"
+    },
+    "extraction_warnings": {
+      "type": "array",
+      "description": "Warnings generated during extraction — ambiguities, conflicts, missing references",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "additionalProperties": false

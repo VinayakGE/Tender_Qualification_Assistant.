@@ -80,7 +80,7 @@ class ClauseExtractor:
         for match in CLAUSE_NUMBER_RE.finditer(text):
             clause_num = match.group(1)
             # Extract heading: text from end of match to next newline
-            rest = text[match.end():].split("\n")[0].strip()
+            rest = text[match.end() :].split("\n")[0].strip()
             heading = rest[:80] if rest else ""
 
             boundaries.append((match.start(), clause_num, heading))

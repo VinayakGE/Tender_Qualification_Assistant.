@@ -50,6 +50,16 @@
     "sector": {
       "type": ["string", "null"],
       "description": "For experience requirements: the required sector or domain"
+    },
+    "source_page": {
+      "type": ["integer", "null"],
+      "minimum": 1,
+      "description": "Page number in the source PDF where this requirement appears"
+    },
+    "extraction_confidence": {
+      "type": ["string", "null"],
+      "enum": ["High", "Medium", "Low", null],
+      "description": "Extractor's confidence that this requirement was correctly parsed"
     }
   },
   "additionalProperties": false

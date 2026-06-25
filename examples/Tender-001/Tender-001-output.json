@@ -1,0 +1,30 @@
+{
+  "recommendation_id": "rec-20260625-001",
+  "tender_id": "tender-001",
+  "company_id": "APEX-INFRA-001",
+  "recommendation": "REVIEW",
+  "qualification_score": 100,
+  "competitive_strength": 44,
+  "incumbent_risk": 75,
+  "execution_risk": 13,
+  "value_score": 58,
+  "primary_bottleneck": "Historical Vendor Dominance",
+  "evidence_gaps": [],
+  "failed_mandatory_requirements": [],
+  "confidence": 1.0,
+  "confidence_reason": [
+    "4 of 4 mandatory requirements verified",
+    "Incumbent risk score (75) exceeds threshold — prior vendor advantage inferred from tender language"
+  ],
+  "reasoning": "Apex Infrastructure Pvt Ltd meets all four mandatory qualification requirements for Tender HB-07. Average annual turnover of Rs. 43.7 Cr exceeds the Rs. 30 Cr threshold. Three completed road construction projects (including two above Rs. 10 Cr) satisfy the experience requirement. ISO 9001:2015 certification is current. Net worth of Rs. 18.4 Cr clears the Rs. 15 Cr floor.\n\nThe recommendation is REVIEW rather than BID because the tender document references a prior KRDCL contract (Package HB-04) awarded to another vendor in 2022 with a satisfactory completion certificate — a signal of incumbent advantage. Incumbent risk score = 75, above the threshold of 70. The decision to bid should depend on whether the team has a direct relationship with KRDCL procurement officials and whether HB-04's vendor is likely to rebid.\n\nNo evidence gaps were detected. All qualification claims in the company profile are backed by documented project completions with performance certificates.",
+  "qualification_detail": {
+    "REQ-001": {"status": "MET", "company_value": 43.87, "threshold": 30, "unit": "INR_crores_annual_average"},
+    "REQ-002": {"status": "MET", "qualifying_projects": ["PRJ-001", "PRJ-002", "PRJ-003"], "threshold": 2},
+    "REQ-003": {"status": "MET", "certification": "ISO 9001:2015", "verified": true},
+    "REQ-004": {"status": "MET", "company_value": 18.4, "threshold": 15, "unit": "INR_crores"},
+    "REQ-005": {"status": "UNKNOWN", "note": "Equipment ownership not declared in company profile"},
+    "REQ-006": {"status": "MET", "qualifying_project": "PRJ-001", "value_inr_crores": 28.5}
+  },
+  "pipeline_duration_seconds": 3.1,
+  "created_at": "2026-06-25T08:14:07Z"
+}

@@ -1,0 +1,72 @@
+{
+  "tender_id": "tender-001",
+  "title": "Construction of Two-Lane Road with Paved Shoulders from Hubli to Dharwad (Package HB-07)",
+  "authority": "Karnataka Road Development Corporation Limited (KRDCL)",
+  "published_date": "2026-05-15",
+  "submission_deadline": "2026-06-30",
+  "contract_value_inr_crores": 38.5,
+  "contract_duration_months": 24,
+  "tender_type": "works",
+  "parsed_at": "2026-06-25T08:14:03Z",
+  "requirements": [
+    {
+      "requirement_id": "REQ-001",
+      "category": "turnover",
+      "description": "Average Annual Turnover of not less than Rs. 30 Crore during the last 3 financial years",
+      "threshold_value": 30,
+      "threshold_unit": "INR_crores_annual_average",
+      "is_mandatory": true,
+      "source_clause": "Section 2.2.1(a)"
+    },
+    {
+      "requirement_id": "REQ-002",
+      "category": "experience",
+      "description": "Successfully completed at least two road/highway construction works each of value not less than Rs. 10 Crore in the last 5 years",
+      "threshold_value": 10,
+      "threshold_unit": "INR_crores_per_project",
+      "minimum_count": 2,
+      "is_mandatory": true,
+      "source_clause": "Section 2.2.2(b)"
+    },
+    {
+      "requirement_id": "REQ-003",
+      "category": "certification",
+      "description": "Valid ISO 9001:2015 Quality Management System certification",
+      "threshold_value": null,
+      "threshold_unit": null,
+      "is_mandatory": true,
+      "source_clause": "Section 2.2.3(a)"
+    },
+    {
+      "requirement_id": "REQ-004",
+      "category": "financial",
+      "description": "Net Worth not less than Rs. 15 Crore as per latest audited balance sheet",
+      "threshold_value": 15,
+      "threshold_unit": "INR_crores",
+      "is_mandatory": true,
+      "source_clause": "Section 2.2.1(b)"
+    },
+    {
+      "requirement_id": "REQ-005",
+      "category": "technical",
+      "description": "Bidder must own or have access to hot mix plant of minimum 60 TPH capacity",
+      "threshold_value": 60,
+      "threshold_unit": "TPH",
+      "is_mandatory": false,
+      "source_clause": "Section 3.1.4"
+    },
+    {
+      "requirement_id": "REQ-006",
+      "category": "experience",
+      "description": "At least one completed road project of value not less than Rs. 25 Crore as single contract",
+      "threshold_value": 25,
+      "threshold_unit": "INR_crores_single_contract",
+      "minimum_count": 1,
+      "is_mandatory": false,
+      "source_clause": "Section 2.2.2(c)"
+    }
+  ],
+  "incumbent_signals": [
+    "Satisfactory completion certificate from KRDCL for previous Package HB-04 awarded in 2022"
+  ]
+}

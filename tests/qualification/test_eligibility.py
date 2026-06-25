@@ -1,12 +1,8 @@
 """Tests for qualification eligibility checkers."""
 
-import pytest
-
 from src.extractor.requirement_extractor import Requirement
 from src.qualification.certifications import CertificationChecker
 from src.qualification.eligibility import EligibilityChecker, RequirementStatus
-from src.qualification.experience import ExperienceChecker
-from src.qualification.financial import FinancialChecker
 from src.qualification.turnover import TurnoverChecker
 
 

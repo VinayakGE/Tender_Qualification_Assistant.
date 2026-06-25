@@ -1,12 +1,11 @@
 """Core recommendation engine — implements the decision tree from docs/recommendation-engine.md."""
 
-from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from dataclasses import dataclass
 
 from src.bottlenecks.classifier import BottleneckClassifier
 from src.bottlenecks.evidence_gap import EvidenceGapDetector
 from src.bottlenecks.reasoning import ReasoningBuilder
-from src.qualification.eligibility import EligibilityResult, RequirementStatus
+from src.qualification.eligibility import EligibilityResult
 from src.recommendation.confidence import ConfidenceEstimator
 from src.scoring.qualification_score import QualificationScorer
 from src.utils.config import get_config
@@ -30,9 +29,11 @@ class Recommendation:
     execution_risk: int | None
     value_score: int | None
     primary_bottleneck: str | None
-    bottleneck_category: str | None
+    bottleneck_category: str | None  # internal only — not exposed in to_dict()
     evidence_gaps: list[str]
+    extraction_warnings: list[str]
     confidence: float
+    confidence_reason: list[str]
     reasoning: str | None
     failed_mandatory_requirements: list[str]
     pipeline_duration_seconds: float | None
@@ -51,9 +52,10 @@ class Recommendation:
             "execution_risk": self.execution_risk,
             "value_score": self.value_score,
             "primary_bottleneck": self.primary_bottleneck,
-            "bottleneck_category": self.bottleneck_category,
             "evidence_gaps": self.evidence_gaps,
+            "extraction_warnings": self.extraction_warnings,
             "confidence": self.confidence,
+            "confidence_reason": self.confidence_reason,
             "reasoning": self.reasoning,
             "failed_mandatory_requirements": self.failed_mandatory_requirements,
             "pipeline_duration_seconds": self.pipeline_duration_seconds,
@@ -90,6 +92,7 @@ class RecommendationEngine:
         incumbent_risk: int | None = None,
         execution_risk: int | None = None,
         value_score: int | None = None,
+        extraction_warnings: list[str] | None = None,
         pipeline_duration_seconds: float | None = None,
     ) -> Recommendation:
         """Produce a recommendation from eligibility and scoring results.
@@ -133,10 +136,12 @@ class RecommendationEngine:
             recommendation=decision,
         )
 
-        confidence = self.confidence_estimator.estimate(
+        confidence, confidence_reason = self.confidence_estimator.estimate(
             eligibility_result=eligibility_result,
             qualification_score=qualification_score,
             competitive_strength=competitive_strength or 50,
+            incumbent_risk=incumbent_risk or 0,
+            incumbent_risk_threshold=self.config.INCUMBENT_RISK_HIGH_THRESHOLD,
         )
 
         rec = Recommendation(
@@ -152,7 +157,9 @@ class RecommendationEngine:
             primary_bottleneck=bottleneck_label,
             bottleneck_category=bottleneck_internal,
             evidence_gaps=evidence_gaps,
+            extraction_warnings=extraction_warnings or [],
             confidence=confidence,
+            confidence_reason=confidence_reason,
             reasoning=reasoning,
             failed_mandatory_requirements=failed_mandatory_ids,
             pipeline_duration_seconds=pipeline_duration_seconds,

@@ -29,30 +29,45 @@ class ConfidenceEstimator:
         eligibility_result: EligibilityResult,
         qualification_score: int,
         competitive_strength: int = 50,
-    ) -> float:
+        incumbent_risk: int = 0,
+        incumbent_risk_threshold: int = 70,
+    ) -> tuple[float, list[str]]:
         """Estimate confidence in the recommendation.
 
         Args:
             eligibility_result: Result from EligibilityChecker.
             qualification_score: Qualification fit score (0-100).
             competitive_strength: Competitive strength score for adjustment.
+            incumbent_risk: Incumbent risk score (passed through for reason generation).
+            incumbent_risk_threshold: Threshold above which incumbent risk is high.
 
         Returns:
-            Confidence score 0.0-1.0.
+            Tuple of (confidence score 0.0-1.0, list of human-readable reasons).
         """
         results = eligibility_result.requirement_results
 
         if not results:
-            return 0.50  # No data → base confidence only
+            return 0.50, ["No requirement data available — confidence is baseline only"]
+
+        reasons: list[str] = []
+        mandatory = [r for r in results if r.is_mandatory]
 
         # Component 1: Data completeness (0 - 0.25)
-        # PARTIAL statuses indicate uncertainty
         definitive = sum(
-            1 for r in results
-            if r.status in (RequirementStatus.PASS, RequirementStatus.FAIL)
+            1 for r in results if r.status in (RequirementStatus.PASS, RequirementStatus.FAIL)
         )
+        partial_results = [
+            r for r in results if r.status not in (RequirementStatus.PASS, RequirementStatus.FAIL)
+        ]
         completeness = definitive / len(results)
         completeness_component = completeness * 0.25
+
+        mandatory_verified = sum(
+            1 for r in mandatory if r.status in (RequirementStatus.PASS, RequirementStatus.FAIL)
+        )
+        reasons.append(f"{mandatory_verified} of {len(mandatory)} mandatory requirements verified")
+        for r in partial_results[:2]:
+            reasons.append(f"{r.description[:60].rstrip()} — status could not be determined")
 
         # Component 2: Score margin from nearest threshold (0 - 0.15)
         distance = min(
@@ -61,13 +76,29 @@ class ConfidenceEstimator:
         )
         margin_component = min(distance / 20.0, 1.0) * 0.15
 
+        if distance <= 5:
+            reasons.append(
+                f"Qualification score ({qualification_score}) is within 5 points of a decision threshold"
+            )
+
         # Component 3: Evidence availability on passing requirements (0 - 0.10)
         passing = [r for r in results if r.status == RequirementStatus.PASS]
         if passing:
             evidence_ratio = sum(1 for r in passing if r.evidence_available) / len(passing)
+            missing_evidence = [r for r in passing if not r.evidence_available]
+            for r in missing_evidence[:2]:
+                reasons.append(f"{r.category.capitalize()} evidence not on file")
         else:
             evidence_ratio = 0.5
         evidence_component = evidence_ratio * 0.10
+
+        # Incumbent risk note (informational — does not affect the numeric score)
+        if incumbent_risk > 0:
+            if incumbent_risk >= incumbent_risk_threshold:
+                reasons.append(
+                    f"Incumbent risk score ({incumbent_risk}) exceeds threshold — "
+                    "prior vendor advantage inferred from tender language"
+                )
 
         base = 0.50
         confidence = base + completeness_component + margin_component + evidence_component
@@ -82,4 +113,4 @@ class ConfidenceEstimator:
             final_confidence=final,
         )
 
-        return final
+        return final, reasons

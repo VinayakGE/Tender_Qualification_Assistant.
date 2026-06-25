@@ -5,7 +5,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from src.extractor.clause_extractor import ClauseExtractor
-from src.extractor.requirement_extractor import Requirement, RequirementExtractor
+from src.extractor.requirement_extractor import ExtractionResult, Requirement, RequirementExtractor
 
 
 class TestClauseExtractor:
@@ -99,15 +99,16 @@ class TestRequirementExtractor:
 
             # Mock the Anthropic client
             with patch.object(extractor, "_call_claude", return_value=self.MOCK_RESPONSE):
-                requirements = extractor.extract(sample_tender_text, tender_id="T001")
+                result = extractor.extract(sample_tender_text, tender_id="T001")
 
-        assert len(requirements) == 2
-        assert all(isinstance(r, Requirement) for r in requirements)
-        assert requirements[0].category == "turnover"
-        assert requirements[0].threshold_value == 30.0
-        assert requirements[0].is_mandatory is True
-        assert requirements[1].category == "certification"
-        assert requirements[1].certification_name == "ISO 9001:2015"
+        assert isinstance(result, ExtractionResult)
+        assert len(result.requirements) == 2
+        assert all(isinstance(r, Requirement) for r in result.requirements)
+        assert result.requirements[0].category == "turnover"
+        assert result.requirements[0].threshold_value == 30.0
+        assert result.requirements[0].is_mandatory is True
+        assert result.requirements[1].category == "certification"
+        assert result.requirements[1].certification_name == "ISO 9001:2015"
 
     def test_parse_response_handles_markdown_fences(self, tmp_path):
         """Parser strips markdown code fences from LLM response."""
@@ -128,7 +129,8 @@ class TestRequirementExtractor:
             wrapped = f"```json\n{self.MOCK_RESPONSE}\n```"
             result = extractor._parse_response(wrapped, "T002")
 
-        assert len(result) == 2
+        assert isinstance(result, ExtractionResult)
+        assert len(result.requirements) == 2
 
     def test_parse_response_invalid_json_raises(self, tmp_path):
         """Parser raises RuntimeError for invalid JSON response."""
@@ -166,6 +168,6 @@ class TestRequirementExtractor:
             extractor = RequirementExtractor()
             result = extractor._parse_response(bad_response, "T004")
 
-        # Only the valid item should be returned
-        assert len(result) == 1
-        assert result[0].category == "turnover"
+        assert isinstance(result, ExtractionResult)
+        assert len(result.requirements) == 1
+        assert result.requirements[0].category == "turnover"

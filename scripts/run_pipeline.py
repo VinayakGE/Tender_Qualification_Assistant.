@@ -7,7 +7,6 @@ Usage:
 """
 
 import argparse
-import json
 import sys
 from pathlib import Path
 
@@ -100,6 +99,7 @@ def main() -> int:
     # Save to file if requested
     if args.output:
         import json as json_mod
+
         args.output.parent.mkdir(parents=True, exist_ok=True)
         with open(args.output, "w", encoding="utf-8") as f:
             json_mod.dump(recommendation.to_dict(), f, indent=2, ensure_ascii=False, default=str)

@@ -1,6 +1,6 @@
 """Project experience checker."""
 
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 
 from src.extractor.requirement_extractor import Requirement
 from src.qualification.eligibility import RequirementResult, RequirementStatus
@@ -62,7 +62,10 @@ class ExperienceChecker:
                 continue
             if required_sector and not self._sector_matches(project, required_sector):
                 continue
-            if threshold_crores and project.get("contract_value_inr_crores", 0) < threshold_crores:
+            project_value = project.get("contract_value_inr_crores") or project.get(
+                "value_inr_crores", 0
+            )
+            if threshold_crores and project_value < threshold_crores:
                 continue
             matching_projects.append(project)
 
@@ -70,11 +73,15 @@ class ExperienceChecker:
 
         # Evidence: check if completion certificates are documented
         evidence_available = any(
-            p.get("has_completion_certificate", False) for p in matching_projects
+            p.get("has_completion_certificate") or p.get("performance_certificate", False)
+            for p in matching_projects
         )
 
         if passes:
-            best = max(matching_projects, key=lambda p: p.get("contract_value_inr_crores", 0))
+            best = max(
+                matching_projects,
+                key=lambda p: p.get("contract_value_inr_crores") or p.get("value_inr_crores", 0),
+            )
             description = (
                 f"Found {len(matching_projects)} qualifying project(s). "
                 f"Best match: {best.get('title', 'Unknown')} "
@@ -82,7 +89,11 @@ class ExperienceChecker:
             )
         else:
             max_value = max(
-                (p.get("contract_value_inr_crores", 0) for p in completed_projects), default=0
+                (
+                    p.get("contract_value_inr_crores") or p.get("value_inr_crores", 0)
+                    for p in completed_projects
+                ),
+                default=0,
             )
             description = (
                 f"No qualifying projects found. "

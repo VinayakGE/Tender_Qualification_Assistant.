@@ -51,7 +51,8 @@ class EvidenceGapDetector:
             "evidence_gaps_detected",
             total_gaps=len(gaps),
             mandatory_gaps=sum(
-                1 for r in eligibility_result.requirement_results
+                1
+                for r in eligibility_result.requirement_results
                 if not r.evidence_available and r.is_mandatory
             ),
         )

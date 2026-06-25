@@ -14,7 +14,6 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.utils.config import get_config
 from src.utils.helpers import ensure_dir
 from src.utils.logger import configure_logging
 
@@ -55,6 +54,7 @@ def main() -> int:
     configure_logging(level="WARNING", fmt="console")
 
     from src.ledger.decisions import DecisionLedger
+
     ledger = DecisionLedger()
     entries = ledger.read_all()
 
@@ -66,7 +66,7 @@ def main() -> int:
     if args.filter:
         entries = [e for e in entries if e.get("recommendation") == args.filter]
     if args.last:
-        entries = entries[-args.last:]
+        entries = entries[-args.last :]
 
     # Build Markdown
     lines = []
@@ -103,7 +103,9 @@ def main() -> int:
         lines.append("|---|---|")
         lines.append(f"| Qualification | {format_score_bar(qual_score)} |")
         if entry.get("competitive_strength") is not None:
-            lines.append(f"| Competitive Strength | {format_score_bar(entry['competitive_strength'])} |")
+            lines.append(
+                f"| Competitive Strength | {format_score_bar(entry['competitive_strength'])} |"
+            )
         if incumbent is not None:
             lines.append(f"| Incumbent Risk | {format_score_bar(incumbent)} |")
         if entry.get("execution_risk") is not None:

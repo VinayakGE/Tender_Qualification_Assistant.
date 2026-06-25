@@ -7,7 +7,6 @@ Usage:
 """
 
 import argparse
-import json
 import sys
 from pathlib import Path
 
@@ -101,6 +100,7 @@ def main() -> int:
             # Import inline to avoid heavy startup for skipped files
             from src.extractor.metadata import MetadataExtractor
             from src.extractor.requirement_extractor import RequirementExtractor
+            from src.ledger.decisions import DecisionLedger
             from src.qualification.eligibility import EligibilityChecker
             from src.recommendation.engine import RecommendationEngine
             from src.scoring.competitiveness import CompetitivenessScorer
@@ -108,26 +108,47 @@ def main() -> int:
             from src.scoring.incumbent_risk import IncumbentRiskScorer
             from src.scoring.qualification_score import QualificationScorer
             from src.scoring.value_score import ValueScorer
-            from src.ledger.decisions import DecisionLedger
 
             metadata = MetadataExtractor().extract(clean_text)
             requirements = RequirementExtractor().extract(clean_text, tender_id=tender_id)
             eligibility = EligibilityChecker().check(requirements, company_profile)
             qual_score = QualificationScorer().score(eligibility)
-            competitive = CompetitivenessScorer().score(company_profile, metadata.contract_value_inr, metadata.tender_type, len(requirements))
+            competitive = CompetitivenessScorer().score(
+                company_profile,
+                metadata.contract_value_inr,
+                metadata.tender_type,
+                len(requirements),
+            )
             incumbent = IncumbentRiskScorer().score(clean_text, metadata.contract_duration_months)
-            execution = ExecutionRiskScorer().score(clean_text, company_profile, metadata.contract_duration_months, len(requirements), qual_score)
-            value = ValueScorer().score(company_profile, metadata.contract_value_inr, metadata.tender_type, qual_score, competitive, incumbent)
-            rec = RecommendationEngine().recommend(eligibility, tender_id, company_id, competitive, incumbent, execution, value)
+            execution = ExecutionRiskScorer().score(
+                clean_text,
+                company_profile,
+                metadata.contract_duration_months,
+                len(requirements),
+                qual_score,
+            )
+            value = ValueScorer().score(
+                company_profile,
+                metadata.contract_value_inr,
+                metadata.tender_type,
+                qual_score,
+                competitive,
+                incumbent,
+            )
+            rec = RecommendationEngine().recommend(
+                eligibility, tender_id, company_id, competitive, incumbent, execution, value
+            )
             DecisionLedger().append(rec)
             save_json(rec.to_dict(), output_path)
 
             print(f"{rec.recommendation} (score: {rec.qualification_score})")
-            results_summary.append({
-                "tender_id": tender_id,
-                "recommendation": rec.recommendation,
-                "qualification_score": rec.qualification_score,
-            })
+            results_summary.append(
+                {
+                    "tender_id": tender_id,
+                    "recommendation": rec.recommendation,
+                    "qualification_score": rec.qualification_score,
+                }
+            )
             scored += 1
         except Exception as exc:
             print(f"FAILED: {exc}")

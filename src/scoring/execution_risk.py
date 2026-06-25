@@ -1,7 +1,5 @@
 """Execution risk scorer — estimates delivery risk based on scope and capacity."""
 
-import re
-
 from src.utils.helpers import clamp
 from src.utils.logger import get_logger
 
@@ -9,12 +7,27 @@ logger = get_logger(__name__)
 
 # Keywords that indicate high delivery complexity
 COMPLEXITY_KEYWORDS = [
-    "integration", "interoperability", "migration", "transformation",
-    "multi-site", "multiple locations", "24x7", "24/7", "round the clock",
-    "sla", "service level", "penalty clause", "liquidated damages",
-    "performance bond", "bank guarantee", "mobilization",
-    "commissioning", "testing and commissioning", "factory acceptance",
-    "site acceptance", "parallel run",
+    "integration",
+    "interoperability",
+    "migration",
+    "transformation",
+    "multi-site",
+    "multiple locations",
+    "24x7",
+    "24/7",
+    "round the clock",
+    "sla",
+    "service level",
+    "penalty clause",
+    "liquidated damages",
+    "performance bond",
+    "bank guarantee",
+    "mobilization",
+    "commissioning",
+    "testing and commissioning",
+    "factory acceptance",
+    "site acceptance",
+    "parallel run",
 ]
 
 MAX_COMPLEXITY_SCORE = 30

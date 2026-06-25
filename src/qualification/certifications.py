@@ -52,8 +52,7 @@ class CertificationChecker:
         # Try partial match (e.g., "ISO 9001" in "ISO 9001:2015")
         if not found:
             found = any(
-                required_cert_lower in cert or cert in required_cert_lower
-                for cert in company_certs
+                required_cert_lower in cert or cert in required_cert_lower for cert in company_certs
             )
 
         # Evidence: having the cert in the profile implies the certificate exists,
@@ -65,7 +64,9 @@ class CertificationChecker:
                 (c for c in company_certs if required_cert_lower in c or c in required_cert_lower),
                 required_cert_lower,
             )
-            description = f"Company holds '{matched_cert}' — matches requirement for '{required_cert}'"
+            description = (
+                f"Company holds '{matched_cert}' — matches requirement for '{required_cert}'"
+            )
         else:
             description = (
                 f"Company does not hold '{required_cert}'. "

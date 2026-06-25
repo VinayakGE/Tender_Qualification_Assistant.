@@ -1,7 +1,5 @@
 """Incumbent risk scorer — estimates likelihood of existing vendor retention."""
 
-import re
-
 from src.utils.helpers import clamp
 from src.utils.logger import get_logger
 
@@ -9,8 +7,30 @@ logger = get_logger(__name__)
 
 # Signals that increase incumbent risk with their point values
 RISK_SIGNALS: list[tuple[list[str], int]] = [
-    (["satisfactory performance", "past performance", "performance in previous"], 25),
-    (["existing vendor", "present service provider", "current contractor", "existing contractor"], 20),
+    # Named previous contract reference — strongest incumbent signal
+    (["including package", "including contract no", "previous package", "earlier package"], 30),
+    # Explicit reference to prior vendor performance
+    (
+        [
+            "previously executed works for",
+            "satisfactory completion certificate",
+            "are encouraged to participate",
+        ],
+        25,
+    ),
+    # Generic satisfactory performance language
+    (["satisfactory performance", "past performance", "performance in previous contract"], 20),
+    # Direct incumbent language
+    (
+        [
+            "existing vendor",
+            "present service provider",
+            "current contractor",
+            "existing contractor",
+        ],
+        20,
+    ),
+    # Renewal / continuation patterns
     (["annual maintenance", "amc", "renewal", "re-tender", "extended scope"], 20),
     (["continuity of service", "uninterrupted service", "seamless transition"], 15),
     (["contract extended", "extension of contract", "period extended"], 15),

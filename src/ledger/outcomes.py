@@ -1,10 +1,7 @@
 """Outcome tracker — records actual bid outcomes against recommendations."""
 
-import json
-from pathlib import Path
-
 from src.utils.config import get_config
-from src.utils.helpers import ensure_dir, generate_id, now_iso, save_json, load_json
+from src.utils.helpers import ensure_dir, generate_id, load_json, now_iso, save_json
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -108,21 +105,22 @@ class OutcomeTracker:
         total = len(outcomes)
         # Only outcomes where we have both recommendation and bid result
         evaluable = [
-            o for o in outcomes
+            o
+            for o in outcomes
             if o.get("system_recommendation") and o.get("bid_submitted") is not None
         ]
 
         # Correct NO_BID: system said NO_BID and bid was either not submitted, or submitted and lost
         correct_no_bid = sum(
-            1 for o in evaluable
+            1
+            for o in evaluable
             if o["system_recommendation"] == "NO_BID"
             and (not o["bid_submitted"] or o.get("bid_won") is False)
         )
 
         # Correct BID: system said BID and bid was submitted
         correct_bid = sum(
-            1 for o in evaluable
-            if o["system_recommendation"] == "BID" and o["bid_submitted"]
+            1 for o in evaluable if o["system_recommendation"] == "BID" and o["bid_submitted"]
         )
 
         accuracy = (correct_no_bid + correct_bid) / len(evaluable) if evaluable else 0.0

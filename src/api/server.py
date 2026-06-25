@@ -32,6 +32,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     # Ensure required directories exist
     from src.utils.helpers import ensure_dir
+
     ensure_dir(config.INCOMING_DIR)
     ensure_dir(config.RAW_DIR)
     ensure_dir(config.PARSED_DIR)

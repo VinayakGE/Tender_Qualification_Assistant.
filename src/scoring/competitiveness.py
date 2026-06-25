@@ -1,7 +1,5 @@
 """Competitive strength scorer."""
 
-import math
-
 from src.utils.helpers import clamp
 from src.utils.logger import get_logger
 
@@ -77,13 +75,18 @@ class CompetitivenessScorer:
 
         # Count projects in the matching sector
         matching = sum(
-            1 for p in projects
+            1
+            for p in projects
             if tender_sector_lower in (p.get("sector") or "").lower()
             or (p.get("sector") or "").lower() in tender_sector_lower
         )
 
         # Bonus if tender sector is in priority sectors
-        priority_bonus = 5.0 if any(tender_sector_lower in s or s in tender_sector_lower for s in priority_sectors) else 0.0
+        priority_bonus = (
+            5.0
+            if any(tender_sector_lower in s or s in tender_sector_lower for s in priority_sectors)
+            else 0.0
+        )
 
         # Scale: 0 matches → 0, 1 match → 10, 2+ → 15, 3+ → 20, priority bonus → up to 25
         base = min(matching * 7, 20)

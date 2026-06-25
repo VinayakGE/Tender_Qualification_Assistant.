@@ -19,8 +19,8 @@ class Config(BaseSettings):
         extra="ignore",
     )
 
-    # LLM
-    ANTHROPIC_API_KEY: str = Field(..., description="Anthropic API key")
+    # LLM — optional: pipeline runs without a key; LLM stages are skipped gracefully
+    ANTHROPIC_API_KEY: str | None = Field(default=None, description="Anthropic API key")
     MODEL: str = Field(
         default="claude-sonnet-4-6",
         description="Claude model to use for all LLM calls",
