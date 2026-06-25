@@ -98,11 +98,9 @@ class PipelineRunner:
             raise RuntimeError(f"Parser failed: {exc}") from exc
         run.add_stage(stage)
 
-        # Save parsed text
-        save_json(
-            {"tender_id": tender_id, "clean_text": clean_text, "parsed_at": now_iso()},
-            self.config.PARSED_DIR / f"{tender_id}.json",
-        )
+        # Save parsed text (version metadata added after extraction)
+        _parsed_payload = {"tender_id": tender_id, "clean_text": clean_text, "parsed_at": now_iso()}
+
 
         # Stage 2: Extract requirements
         stage = PipelineStage("extractor").start({"text_chars": len(clean_text)})
@@ -120,6 +118,14 @@ class PipelineRunner:
             run.add_stage(stage)
             raise RuntimeError(f"Extractor failed: {exc}") from exc
         run.add_stage(stage)
+
+        # Save parsed text + version provenance
+        _parsed_payload.update({
+            "extractor_version": extraction.extractor_version,
+            "prompt_version": extraction.prompt_version,
+            "schema_version": extraction.schema_version,
+        })
+        save_json(_parsed_payload, self.config.PARSED_DIR / f"{tender_id}.json")
 
         # Stage 3: Qualify
         stage = PipelineStage("qualification").start({"requirements": len(requirements)})

@@ -15,6 +15,7 @@ from pydantic import BaseModel, Field, field_validator
 from src.utils.config import get_config
 from src.utils.helpers import generate_id, truncate_text
 from src.utils.logger import get_logger
+from src.utils.version import PIPELINE_VERSION, REQUIREMENT_SCHEMA_VERSION
 
 logger = get_logger(__name__)
 
@@ -79,10 +80,13 @@ class Requirement(BaseModel):
 
 @dataclass
 class ExtractionResult:
-    """Output from RequirementExtractor — requirements plus any extraction warnings."""
+    """Output from RequirementExtractor — requirements, warnings, and version provenance."""
 
     requirements: list[Requirement] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
+    extractor_version: str = PIPELINE_VERSION
+    prompt_version: str = "unknown"
+    schema_version: str = REQUIREMENT_SCHEMA_VERSION
 
 
 class RequirementExtractor:
@@ -96,6 +100,7 @@ class RequirementExtractor:
         self.config = get_config()
         self._client = None  # created lazily only if API key is present
         self._prompt_template: str | None = None
+        self._prompt_version: str | None = None
 
     @property
     def _has_api_key(self) -> bool:
@@ -106,6 +111,21 @@ class RequirementExtractor:
             import anthropic
             self._client = anthropic.Anthropic(api_key=self.config.ANTHROPIC_API_KEY)
         return self._client
+
+    def _read_prompt_version(self) -> str:
+        """Read the version line from the prompt file header, e.g. '**Version:** 1.1.0' → '1.1.0'."""
+        if self._prompt_version is not None:
+            return self._prompt_version
+        try:
+            prompt_path = self.config.PROMPTS_DIR / "requirement-extractor.md"
+            for line in prompt_path.read_text(encoding="utf-8").splitlines():
+                if line.startswith("**Version:**"):
+                    self._prompt_version = line.split("**Version:**", 1)[1].strip()
+                    return self._prompt_version
+        except Exception:
+            pass
+        self._prompt_version = "unknown"
+        return self._prompt_version
 
     def extract(self, tender_text: str, tender_id: str = "") -> ExtractionResult:
         """Extract requirements and warnings from tender text.
@@ -124,13 +144,17 @@ class RequirementExtractor:
         text_to_send = truncate_text(tender_text, MAX_TEXT_CHARS)
         prompt = prompt_template.replace("{tender_text}", text_to_send)
 
+        prompt_version = self._read_prompt_version()
+
         if not self._has_api_key:
             logger.info(
                 "requirement_extraction_offline_mode",
                 tender_id=tender_id,
                 reason="ANTHROPIC_API_KEY not set — using regex heuristics",
             )
-            return self._extract_with_regex(tender_text, tender_id)
+            result = self._extract_with_regex(tender_text, tender_id)
+            result.prompt_version = prompt_version
+            return result
 
         logger.info(
             "requirement_extraction_started",
@@ -140,6 +164,7 @@ class RequirementExtractor:
 
         raw_response = self._call_claude(prompt)
         result = self._parse_response(raw_response, tender_id)
+        result.prompt_version = prompt_version
 
         logger.info(
             "requirement_extraction_complete",
@@ -147,6 +172,8 @@ class RequirementExtractor:
             requirements_found=len(result.requirements),
             mandatory_count=sum(1 for r in result.requirements if r.is_mandatory),
             warnings_count=len(result.warnings),
+            extractor_version=result.extractor_version,
+            prompt_version=result.prompt_version,
         )
 
         return result
