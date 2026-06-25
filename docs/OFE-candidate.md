@@ -1,8 +1,9 @@
 # Opportunity Fit Engine — Candidate Architecture
 
-**Status: Validated candidate — do not implement**
-**Origin: RA-1 Reality Acquisition sprint, derived from Tender001–006 evidence**
-**Evidence Gate: RA-1-Summary.md must be complete before this document advances to engineering**
+**Status: Architecture approved — Epic 1 (Domain Fit) open for implementation**
+**Origin: RA-1 Reality Acquisition sprint, closed 2026-06-25**
+**Evidence Gate: RA-1-Summary.md complete. All promotion criteria met. Type 2 freeze lifted.**
+**Implementation sequence: Epic 1 (Domain Fit) → RA-2 benchmark → Epic 2 (Document Intelligence)**
 
 ---
 
@@ -183,13 +184,17 @@ Asking these out of order produces systematically wrong answers when domain mism
 
 ---
 
-## Evidence Required to Advance
+## Evidence Gates — Status After RA-1
 
-This document is a candidate, not a plan. It advances when:
+All gates cleared.
 
-1. RA-1-Summary.md is complete
-2. PAT-001 (Domain Fit) maintains zero counterexamples through RA-1
-3. At least one additional failure class beyond PAT-001 and PAT-002 is observed (or absence of such is noted)
-4. A domain taxonomy for Indian government procurement is drafted and reviewed
+| Gate | Status |
+|---|---|
+| RA-1-Summary.md complete | ✓ — closed 2026-06-25 |
+| PAT-001 zero logic-level counterexamples through RA-1 | ✓ — 5 obs, 0 logic-level CX |
+| Additional failure class beyond PAT-001 observed | ✓ — PAT-003 (Requirement Resolution) promoted |
+| Domain taxonomy drafted | ✓ — hierarchical taxonomy in Module 1 below |
 
-**Do not implement any component of this architecture until these gates are cleared.**
+**Implementation is now open.** Epic 1 (Domain Fit) proceeds first. Epic 2 (Document Intelligence / PAT-003) proceeds after RA-2 benchmark confirms Epic 1 delivered projected improvement.
+
+See `docs/RA-2-Plan.md` for the RA-2 scope, success criteria, and delta report template.
