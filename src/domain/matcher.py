@@ -27,7 +27,9 @@ class DomainMatcher:
         for project in company_profile.get("completed_projects", []):
             proj_sector = project.get("sector", "")
             if proj_sector:
-                mapped = SECTOR_TO_BRANCH.get(proj_sector) or SECTOR_TO_BRANCH.get(proj_sector.lower())
+                mapped = SECTOR_TO_BRANCH.get(proj_sector) or SECTOR_TO_BRANCH.get(
+                    proj_sector.lower()
+                )
                 if mapped:
                     branches.add(mapped)
 

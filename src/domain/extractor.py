@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from .taxonomy import DOMAIN_BRANCHES
 
@@ -66,9 +66,7 @@ class DomainExtractor:
             primary_branch = ranked[0][0]
             primary_score = ranked[0][1]
             threshold = primary_score * 0.3
-            secondary_branches = [
-                b for b, s in ranked[1:] if s >= threshold and s > 0
-            ]
+            secondary_branches = [b for b, s in ranked[1:] if s >= threshold and s > 0]
 
         return TenderDomainSignals(
             branch_scores=branch_scores,

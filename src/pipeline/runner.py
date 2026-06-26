@@ -199,8 +199,7 @@ class PipelineRunner:
 
         if domain_result.decision == "UNCERTAIN":
             domain_warnings.append(
-                f"Domain Fit UNCERTAIN: {domain_result.reason} "
-                "Pipeline continues with REVIEW flag."
+                f"Domain Fit UNCERTAIN: {domain_result.reason} Pipeline continues with REVIEW flag."
             )
 
         # Stage 2: Extract requirements
