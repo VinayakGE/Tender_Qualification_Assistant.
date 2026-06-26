@@ -18,6 +18,26 @@ This is a generalization test, not a performance improvement. No code changes ar
 
 ---
 
+## Pre-Collection Checklist (complete before sourcing any tender)
+
+The 24 tenders are consciously chosen. Conscious selection creates selection bias risk: tenders may be chosen because they are "interesting," which replicates the same curatorial pattern as RA-1. This checklist is verified before the first tender is collected, and again at the halfway point (after tender 12).
+
+| Dimension | Target | Verify before starting | Verify at tender 12 |
+|---|---|---|---|
+| Distinct issuing authorities | ≥ 8 | — | — |
+| States / territories covered | ≥ 4 | — | — |
+| Sector categories | All 5 as designed | — | — |
+| OCR / scan quality | Mix: at least 4 scanned/poor-quality PDFs | — | — |
+| Tenders with corrigenda | 3–6 | — | — |
+| Tenders without corrigenda | Remainder | — | — |
+| Contract size (small < Rs. 5 Cr) | ≥ 4 | — | — |
+| Contract size (large > Rs. 50 Cr) | ≥ 4 | — | — |
+| Tenders evaluated against ≥ 2 profiles | ≥ 6 | — | — |
+
+A tender chosen primarily because it is expected to fail interestingly is a selection bias risk. When in doubt, prefer the less interesting tender.
+
+---
+
 ## Challenge Set Design
 
 **24 tenders** across 5 categories. The count is fixed before the sprint starts — no adding tenders after results begin arriving.
