@@ -73,6 +73,18 @@ Record:
 
 Record the class for every decision. Do not explain divergences during the sprint — classification first, analysis after all 10 are complete.
 
+### Trust vs Correctness (record separately)
+
+Agreement on recommendation does not imply the evaluator would act on the engine output. After showing the engine result, note any of the following:
+
+- "I agree, but I can't present this to my manager without more detail"
+- "I agree, but our policy requires a manual review regardless"
+- "I agree, but I wouldn't rely on this alone"
+- Evaluator skips sections of the engine output without reading them
+- Evaluator uses the recommendation but not the reasoning
+
+These are not reasoning failures — the engine may be correct. They are product adoption signals: gaps between correctness and usability that engineering alone cannot close. Record them in the decision log under a separate "adoption signal" field. Do not conflate them with divergence classifications.
+
 ---
 
 ## The Surprise Log
