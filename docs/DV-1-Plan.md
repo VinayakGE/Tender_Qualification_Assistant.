@@ -1,8 +1,24 @@
 # DV-1 Plan — Decision Validation
 
 **Sprint:** Decision Validation — Sprint 1
-**Status:** Planned — begins after RA-2.5 results are published
-**Prerequisite:** RA-2.5 complete, Domain Fit Gate confirmed to generalize
+**Status:** Phase 1 active (prospect research) — outreach begins after RA-2.5 results are published
+**Prerequisite for outreach:** RA-2.5 complete, Domain Fit Gate confirmed to generalize
+
+## Phased Execution
+
+DV-1 does not wait for RA-2.5 entirely. List-building runs in parallel.
+
+| Phase | Trigger | Activity |
+|---|---|---|
+| Phase 1 — Research | Now (RA-2.5 in progress) | Build `validation/DV-1/prospect-list.md`: 25 consultants researched, 10 shortlisted. No outreach. |
+| Phase 2 — Sector alignment | RA-2.5 results published | Use RA-2.5 failure classes to re-rank shortlist: prioritize consultants whose portfolio covers the weakest sectors. |
+| Phase 3 — Outreach and sessions | Shortlist confirmed | Contact 5, schedule 3 sessions. Run their tenders through engine before each session. |
+
+**Why research before RA-2.5 completes:** The prospect pool takes time to identify and does not change based on engine results. Which prospects to prioritize does change — that re-ranking waits for Phase 2. Building the pool now means outreach can begin the day RA-2.5 results are published, not weeks later.
+
+**Funnel target:** 25 researched → 10 shortlisted → 5 contacted → 3 sessions → 10 observed decisions.
+
+The unit of evidence is still the observed decision. A consultant with 30 active clients may yield 3–4 decisions per session.
 
 ---
 
