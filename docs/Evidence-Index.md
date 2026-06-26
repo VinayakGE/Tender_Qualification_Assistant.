@@ -2,7 +2,7 @@
 
 **Purpose:** One-page record of what has been demonstrated versus what remains a hypothesis. No narrative. Append only — prior rows are never edited.
 
-Last updated: 2026-06-26
+Last updated: 2026-06-26 (market validation rows added)
 
 ---
 
@@ -60,3 +60,6 @@ Explicit record of what remains hypothesis.
 | PAT-004 fix improves decision quality | Candidate — 2 observations, no confirmed output-level impact | 1 more observation with output-level impact; or RA-2.5 surfaces ISO miss causing false BID |
 | PAT-005 fix is warranted | Candidate — 1 observation, output masked | 1 more observation with confirmed output-level impact (engine BID / human NO_BID on structurally ineligible tender) |
 | Domain taxonomy is sufficient for commercial use | Unknown — only 8 branches, 1 company sector tested | RA-2.5 multi-profile run; authority-conflation hypothesis verdict |
+| The engine produces recommendations bid managers would act on | Unvalidated — no real bid managers have reviewed outputs | Structured sessions with ≥3 bid managers across ≥2 organizations; compare engine recommendation to actual bid/no-bid decisions on live tenders |
+| The accuracy improvement is valuable enough to pay for | Unvalidated — no pricing or willingness-to-pay data | Customer discovery: establish what a prevented false BID (wasted bid prep) is worth to a target organization; identify whether 90%+ agreement clears the threshold for trust |
+| The development methodology generalizes to a second customer | Unvalidated — built for one road contractor (Apex profile) | RA-2.5 multi-profile run provides partial evidence; full validation requires running the RA cycle with a real second customer's actual tenders and verdicts |
