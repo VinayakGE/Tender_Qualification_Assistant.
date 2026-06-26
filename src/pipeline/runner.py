@@ -2,6 +2,7 @@
 
 from pathlib import Path
 
+from src.domain.gate import DomainFitGate, DomainFitResult
 from src.extractor.metadata import MetadataExtractor
 from src.extractor.requirement_extractor import RequirementExtractor
 from src.ledger.decisions import DecisionLedger
@@ -16,7 +17,7 @@ from src.scoring.execution_risk import ExecutionRiskScorer
 from src.scoring.incumbent_risk import IncumbentRiskScorer
 from src.scoring.value_score import ValueScorer
 from src.utils.config import get_config
-from src.utils.helpers import ensure_dir, load_json, now_iso, save_json, slugify
+from src.utils.helpers import ensure_dir, generate_id, load_json, now_iso, save_json, slugify
 from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -97,6 +98,110 @@ class PipelineRunner:
 
         # Save parsed text (version metadata added after extraction)
         _parsed_payload = {"tender_id": tender_id, "clean_text": clean_text, "parsed_at": now_iso()}
+
+        # Stage 1.5: Domain Fit Gate — runs before extraction to avoid evaluating
+        # thresholds on domain-mismatched tenders (Epic 1, RA-2).
+        domain_warnings: list[str] = []
+        stage = PipelineStage("domain_fit").start({"text_chars": len(clean_text)})
+        try:
+            domain_result: DomainFitResult = DomainFitGate().evaluate(clean_text, company_profile)
+            stage.complete(
+                {
+                    "decision": domain_result.decision,
+                    "tender_branch": domain_result.tender_branch,
+                    "company_branches": domain_result.company_branches,
+                    "confidence": round(domain_result.confidence, 2),
+                }
+            )
+            logger.info(
+                "domain_fit_gate",
+                decision=domain_result.decision,
+                tender_branch=domain_result.tender_branch,
+                company_branches=domain_result.company_branches,
+                confidence=round(domain_result.confidence, 2),
+                reason=domain_result.reason,
+            )
+        except Exception as exc:
+            stage.fail(str(exc))
+            run.add_stage(stage)
+            logger.warning("domain_fit_gate_error", error=str(exc))
+            domain_result = DomainFitResult(
+                decision="UNCERTAIN",
+                company_branches=[],
+                tender_branch=None,
+                tender_signals={},
+                reason=f"Domain gate raised an exception: {exc}",
+                confidence=0.50,
+            )
+        run.add_stage(stage)
+
+        if domain_result.decision == "FAIL":
+            branch_label = domain_result.tender_branch or "unknown domain"
+            company_label = ", ".join(domain_result.company_branches) or "unknown"
+            warning_msg = (
+                f"Domain Fit FAIL: tender requires '{branch_label}'; "
+                f"company operates in '{company_label}'. {domain_result.reason}"
+            )
+            reasoning_text = (
+                f"Recommendation: NO_BID. Primary issue: Domain Mismatch. "
+                f"Tender domain '{branch_label}' does not match company domain '{company_label}'. "
+                f"{domain_result.reason} "
+                f"Domain gate confidence: {domain_result.confidence:.0%}. "
+                "Pipeline terminated — threshold evaluation skipped."
+            )
+            domain_fail_rec = Recommendation(
+                recommendation_id=generate_id("rec"),
+                tender_id=tender_id,
+                company_id=company_id,
+                recommendation="NO_BID",
+                qualification_score=0,
+                competitive_strength=None,
+                incumbent_risk=None,
+                execution_risk=None,
+                value_score=None,
+                primary_bottleneck="Domain Mismatch",
+                bottleneck_category="domain_fit",
+                evidence_gaps=[],
+                extraction_warnings=[warning_msg],
+                confidence=domain_result.confidence,
+                confidence_reason=[
+                    f"Domain mismatch detected (confidence {domain_result.confidence:.0%}). "
+                    "No threshold evaluation performed."
+                ],
+                reasoning=reasoning_text,
+                failed_mandatory_requirements=[],
+                pipeline_duration_seconds=run.total_duration_seconds,
+                created_at=now_iso(),
+            )
+
+            # Stage 8: Ledger
+            ledger_stage = PipelineStage("ledger").start()
+            try:
+                DecisionLedger().append(domain_fail_rec)
+                ledger_stage.complete()
+            except Exception as exc:
+                ledger_stage.fail(str(exc))
+                logger.error("ledger_append_failed", error=str(exc))
+            run.add_stage(ledger_stage)
+
+            output_path = self.config.OUTCOMES_DIR / f"{tender_id}_recommendation.json"
+            save_json(domain_fail_rec.to_dict(), output_path)
+
+            logger.info(
+                "pipeline_complete",
+                tender_id=tender_id,
+                recommendation="NO_BID",
+                reason="domain_mismatch",
+                duration_seconds=run.total_duration_seconds,
+                output_path=str(output_path),
+            )
+            return domain_fail_rec
+
+        if domain_result.decision == "UNCERTAIN":
+            domain_warnings.append(
+                f"Domain Fit UNCERTAIN: {domain_result.reason} "
+                "Pipeline continues with REVIEW flag."
+            )
 
         # Stage 2: Extract requirements
         stage = PipelineStage("extractor").start({"text_chars": len(clean_text)})
@@ -198,7 +303,7 @@ class PipelineRunner:
                 incumbent_risk=incumbent_risk,
                 execution_risk=execution_risk,
                 value_score=value_score,
-                extraction_warnings=extraction_warnings,
+                extraction_warnings=domain_warnings + extraction_warnings,
                 pipeline_duration_seconds=run.total_duration_seconds,
             )
             stage.complete({"recommendation": recommendation.recommendation})
