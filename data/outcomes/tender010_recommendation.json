@@ -1,5 +1,5 @@
 {
-  "recommendation_id": "rec_280e6546",
+  "recommendation_id": "rec_4efd445f",
   "tender_id": "tender010",
   "company_id": "APEX-INFRA-001",
   "recommendation": "NO_BID",
@@ -20,8 +20,8 @@
   ],
   "reasoning": "Recommendation: NO_BID. Qualification score: 83/100. Primary issue: Experience Requirement Gap.",
   "failed_mandatory_requirements": [
-    "req_70e987e6"
+    "req_79ad76b7"
   ],
-  "pipeline_duration_seconds": 0.012,
-  "created_at": "2026-06-25T20:51:57Z"
+  "pipeline_duration_seconds": 0.026,
+  "created_at": "2026-06-26T00:16:13Z"
 }

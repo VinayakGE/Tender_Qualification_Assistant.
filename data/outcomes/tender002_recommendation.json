@@ -1,24 +1,24 @@
 {
-  "recommendation_id": "rec_2198b3dd",
+  "recommendation_id": "rec_13eccf44",
   "tender_id": "tender002",
   "company_id": "APEX-INFRA-001",
-  "recommendation": "BID",
-  "qualification_score": 100,
-  "competitive_strength": 45,
-  "incumbent_risk": 60,
-  "execution_risk": 19,
-  "value_score": 46,
-  "primary_bottleneck": null,
+  "recommendation": "NO_BID",
+  "qualification_score": 0,
+  "competitive_strength": null,
+  "incumbent_risk": null,
+  "execution_risk": null,
+  "value_score": null,
+  "primary_bottleneck": "Domain Mismatch",
   "evidence_gaps": [],
   "extraction_warnings": [
-    "Offline mode: regex extraction only — LLM extraction disabled"
+    "Domain Fit FAIL: tender requires 'building-construction'; company operates in 'road-highway'. Tender domain 'building-construction' does not match company domain(s): road-highway."
   ],
-  "confidence": 1.0,
+  "confidence": 0.92,
   "confidence_reason": [
-    "1 of 1 mandatory requirements verified"
+    "Domain mismatch detected (confidence 92%). No threshold evaluation performed."
   ],
-  "reasoning": "Recommendation: BID. Qualification score: 100/100.",
+  "reasoning": "Recommendation: NO_BID. Primary issue: Domain Mismatch. Tender domain 'building-construction' does not match company domain 'road-highway'. Tender domain 'building-construction' does not match company domain(s): road-highway. Domain gate confidence: 92%. Pipeline terminated — threshold evaluation skipped.",
   "failed_mandatory_requirements": [],
-  "pipeline_duration_seconds": 0.046,
-  "created_at": "2026-06-25T19:26:30Z"
+  "pipeline_duration_seconds": 0.14,
+  "created_at": "2026-06-26T00:16:10Z"
 }
