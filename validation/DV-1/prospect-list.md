@@ -99,6 +99,27 @@ Without a stopping rule, research expands indefinitely. These three conditions t
 
 ---
 
+## Warm Introduction Map
+
+Build this before cold outreach. A warm introduction has a materially higher conversion rate for a 30–60 minute observation session than a cold email, particularly when you are asking for a real work session rather than a product demo.
+
+**Primary milestone:** First scheduled Decision Laboratory session — not prospects identified, not emails sent.
+
+| Introducer | Their context | Who they can reach | Sectors covered | Status |
+|---|---|---|---|---|
+| | | | | |
+
+**Sources to map first:**
+- Former colleagues (finance, banking, consulting backgrounds often have cross-industry procurement exposure)
+- LinkedIn 2nd-degree connections in EPC, infrastructure, IT services, government contracting
+- Alumni networks (engineering, MBA, public policy)
+- Startup founders serving construction or procurement
+- Anyone who has bid on government tenders personally
+
+**Note:** A prospect reached via warm introduction counts the same in the funnel as a cold contact. The introduction is a conversion tool, not a quality signal about the prospect's Evidence Potential.
+
+---
+
 ## Funnel Tracker
 
 | Stage | Target | Actual |
