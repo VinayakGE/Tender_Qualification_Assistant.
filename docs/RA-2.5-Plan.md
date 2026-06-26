@@ -158,6 +158,25 @@ If the prediction is wrong, that's the most important finding of RA-2.5.
 
 ---
 
+## Surprise Log
+
+Track surprises alongside failures. A surprise is not a bug — it is an observation that doesn't fit the current model without being a clear failure.
+
+During the sprint, record any of the following in `benchmarks/suite-RA25/surprise-log.md`:
+
+- Engine confidence unexpectedly low on an apparently easy tender (why?)
+- Branch label correct for an authority that was expected to conflict (what worked?)
+- Gate returns UNCERTAIN on a tender that seemed clear to the human reviewer
+- Human reviewers disagree on the correct verdict for the same tender
+- A domain branch scores surprisingly high on a tender from a different domain
+- Any result that prompts the reaction "I didn't expect that"
+
+**Format:** One entry per surprise. Tender ID, what was expected, what happened, why it's surprising. No analysis required during the sprint — recording is the discipline. Analysis happens in the delta report.
+
+Surprises are not success criteria. They do not trigger fixes. They are seeds: the inputs to the next RA cycle's question design. PAT-003 began as a surprise in RA-1 (T006 experience value looked contaminated but the sprint hadn't named the pattern yet). The Surprise Log is where the next pattern class is likely to first appear.
+
+---
+
 ## What RA-2.5 Is Not
 
 - **Not Epic 2.** No Requirement Resolution code. No regex changes. No PAT-004 fix.
