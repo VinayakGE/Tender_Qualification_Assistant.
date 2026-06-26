@@ -191,6 +191,47 @@ Best prospects are not spent on Wave 1. Wave 1 is for calibrating the session pr
 
 ---
 
+## Decision Owner Contacts
+
+Publicly sourced. Target title: Bid Manager / Proposal Manager / Business Development Head / Tendering Head / Director. Cells marked "—" need LinkedIn search before outreach.
+
+| # | Company | Decision Owner | Title | Phone | Email | LinkedIn | Notes |
+|---|---|---|---|---|---|---|---|
+| 1 | TenderJunction LLP | Ajaykumar Kori | Tendering Specialist / Partner | +91 9898570353 | info@tenderjunction.in | linkedin.com/in/ajaykumar-kori | Co-founder alongside Sonal Kori |
+| 2 | Classic Tenders (CTPL) | Praveshsingh Rajput | Director | — | — | linkedin.com/company/classic-tenders | Co-director with Sujeet Rajput; search LinkedIn for personal profile |
+| 3 | TendersConsultant.com | — | — | — | — | about.me/tendersbiddingconsultant | Harshita Rajput mentioned on team; founder not publicly identified |
+| 4 | TendersOnTime | Sanjay Vyas | Director & Co-Founder | +91 9987273457 | info@tendersontime.com | linkedin.com/in/sanjay-vyas-483b2687 | Also: linkedin.com/in/sanjaykvyas |
+| 5 | ProBid Consultants LLP | Santosh Kumar | Founder & Director | +91 7016628865 | Ankita@probidconsultants.com | linkedin.com/in/santosh-kumar-3124a1157 | Partners: Anish Parmar, Dev Prajapati |
+| 6 | L&T | — | VP / Head — Bid Management | — | — | linkedin.com/company/larsen-toubro | Search LinkedIn: "bid manager" OR "proposal manager" at L&T |
+| 7 | Afcons Infrastructure | — | Head — Proposals / Contracts | — | — | linkedin.com/company/afcons-infrastructure-limited | MD: S Paramasivan; search for Contracts / BD head |
+| 8 | NCC Limited | Ramanaiah Peerla | AGM — Tendering | — | — | linkedin.com/in/ramanaiah-peerla-49bb305a | 21+ yrs tendering/estimation; confirmed decision role |
+| 9 | MEIL | — | Head — Estimation / BD | — | — | linkedin.com/company/meilgroupofficial | Search LinkedIn for estimation or BD head |
+| 10 | HCC | — | Head — Proposals / Contracts | — | — | linkedin.com/company/hindustan-construction | Search LinkedIn for contracts or proposal head |
+| 11 | Tata Projects | — | Head — Bids / Proposals | — | — | linkedin.com/company/tata-projects | Search LinkedIn for bid or proposal head |
+| 12 | IRCON International | — | GM / DGM — Business Development | — | — | linkedin.com/company/ircon-international-ltd | Govt PSU; BD contacts may be publicly listed on ircon.co.in |
+| 13 | TCS | — | Practice Head — Government IT | — | — | linkedin.com/company/tata-consultancy-services | Search: "government bid manager" OR "proposal manager" at TCS |
+| 14 | Infosys | — | Head — Government Bids | — | — | linkedin.com/company/infosys | Search: "bid manager" government vertical at Infosys |
+| 15 | Tech Mahindra | — | Head — Government / Public Sector BD | — | — | linkedin.com/company/tech-mahindra | Search: government sector BD head |
+| 16 | HCLTech | — | Head — Government Solutions | — | — | linkedin.com/company/hcltech | Search LinkedIn for government vertical proposal head |
+| 17 | NICSI | — | Head — Project Management / Procurement | — | — | linkedin.com/company/nicsi | NICSI is itself a procurement org; contact through nicsi.nic.in |
+| 18 | Famous MEP Systems | — | Director / BD Head | — | — | famousmepsystems.in/contact | Small firm; director likely directly reachable via website |
+| 19 | Sankhla Engineers | — | Director / Proprietor | — | — | sankhlaengineers.com | "A" class electrical contractor; proprietor likely main contact |
+| 20 | Universal Enterprises (Mincon) | — | Director / BD Head | — | — | universalmincon.com/contact | Search LinkedIn or contact via website |
+| 21 | Apollo Power Systems | — | Director / BD Head | — | — | apollopowersystems.com | Bengaluru; search LinkedIn or website |
+| 22 | Complete MEP Solutions LLP | — | Partner / Director | — | — | completemepsolutions.in | Small LLP; partner likely direct contact |
+| 23 | Rodic Consultants | Raj Kumar | Chairman & MD | — | — | linkedin.com/company/rodicconsultants | 2000+ employees; business dev head may be a better entry point |
+| 24 | SYSTRA India | Hari Somalraju | Managing Director | — | — | linkedin.com/company/systra-mva-consulting-india-private-limited | HQ: Navi Mumbai; 2,400+ employees; search for BD Director |
+| 25 | BARSYL | Sunil Srivastava | Managing Director | — | — | linkedin.com/company/balajirailroadsystems | Director-Corporate Affairs: Manoranjan Pershad (better entry point for outreach) |
+| 26 | Eka Infra | Sajith Sreedharan | Director & Co-Founder | — | info@ekainfra.com | linkedin.com/in/sajith-sreedharan-935b9213 | Mumbai; small firm; director is direct contact |
+| 27 | SRCC | S R Chaudhuri | Founder & MD | — | — | srcconsultancyservices.com | Retired GM East Coast Railway; Kolkata HQ; 23, J.C.Guha Sarani, Lake Place |
+| 28 | The Tender Desk | — | Founder / Director | — | — | thetenderdesk.in/contact | Founded 2020; Chandigarh; contact via website form |
+| 29 | Fichtner Consulting Engineers | Sunil Sharma | VP — Water & Infrastructure | — | — | linkedin.com/company/fichtner-consulting-engineer-india-private-limited | Also: Devendra Mishr (Head VP, SBU Water & Infra); phone: +91 80 4016 3666 |
+| 30 | Tender18 | — | Founder / Director | +91 7069661818 | — | tender18.com | Railway IREPS specialist; phone confirmed |
+
+**Cells still blank:** LinkedIn personal profile search needed for #2 (Praveshsingh Rajput), #3, #6–7, #9–17, #18–22, #23–24, #28. Large EPC and IT companies: search LinkedIn by company + title rather than by name.
+
+---
+
 ## Session Prep Protocol
 
 Before each confirmed session:
