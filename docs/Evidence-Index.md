@@ -69,3 +69,14 @@ Explicit record of what remains hypothesis.
 | **Stage C — Commercial Validation** | | |
 | Value is large enough that organizations adopt and pay | Unvalidated — Stage B must complete first | Repeat usage without prompting; budget owner engagement; procurement process initiated |
 | Development methodology generalizes to a second decision owner's context | Unvalidated — RA cycle built against one company's tenders and verdicts | Run one full RA cycle using a second organization's actual tenders and their own human verdicts; partial evidence from RA-2.5 multi-profile run |
+
+---
+
+## Sprint Discipline Rules
+
+These rules protect the attribution chain. A result that cannot be attributed cleanly to one change is not a result — it is noise.
+
+1. **No new epics unless promoted by evidence.** A pattern must meet the promotion threshold (minimum observation count, independent authorities, confirmed output-level impact) before it enters the engineering backlog.
+2. **No roadmap changes because of enthusiasm.** Momentum after a successful sprint is the highest-risk moment for discipline failure. The next sprint is defined by the Evidence Index, not by confidence.
+3. **No engineering based on a single customer request.** One session, one organization, one observation is a candidate pattern — not a promoted one. It goes in the surprise log.
+4. **No engineering during a benchmark sprint.** Changing the engine mid-sprint contaminates the measurement. A divergence observed in session 3 and fixed before session 7 belongs to neither the original engine nor the patched one.
