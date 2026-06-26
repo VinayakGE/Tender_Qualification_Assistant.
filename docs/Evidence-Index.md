@@ -2,7 +2,7 @@
 
 **Purpose:** One-page record of what has been demonstrated versus what remains a hypothesis. No narrative. Append only — prior rows are never edited.
 
-Last updated: 2026-06-26 (market validation rows added)
+Last updated: 2026-06-26 (market validation rows refined: decision-owner framing, specific evidence collection methods)
 
 ---
 
@@ -60,6 +60,7 @@ Explicit record of what remains hypothesis.
 | PAT-004 fix improves decision quality | Candidate — 2 observations, no confirmed output-level impact | 1 more observation with output-level impact; or RA-2.5 surfaces ISO miss causing false BID |
 | PAT-005 fix is warranted | Candidate — 1 observation, output masked | 1 more observation with confirmed output-level impact (engine BID / human NO_BID on structurally ineligible tender) |
 | Domain taxonomy is sufficient for commercial use | Unknown — only 8 branches, 1 company sector tested | RA-2.5 multi-profile run; authority-conflation hypothesis verdict |
-| The engine produces recommendations bid managers would act on | Unvalidated — no real bid managers have reviewed outputs | Structured sessions with ≥3 bid managers across ≥2 organizations; compare engine recommendation to actual bid/no-bid decisions on live tenders |
-| The accuracy improvement is valuable enough to pay for | Unvalidated — no pricing or willingness-to-pay data | Customer discovery: establish what a prevented false BID (wasted bid prep) is worth to a target organization; identify whether 90%+ agreement clears the threshold for trust |
-| The development methodology generalizes to a second customer | Unvalidated — built for one road contractor (Apex profile) | RA-2.5 multi-profile run provides partial evidence; full validation requires running the RA cycle with a real second customer's actual tenders and verdicts |
+| The engine reasoning matches how a decision owner evaluates a tender | Unvalidated — no real Go/No-Go decision owners have reviewed outputs | Observe ≥3 decision owners evaluating a real tender; compare their reasoning sequence and conclusion to the engine's; record points of agreement, disagreement, and questions the engine does not answer. Primary paths: (1) tender consultants working across multiple companies, (2) bid managers in EPC firms. Method: "Can I sit with you while you evaluate one real tender?" — not "Will you buy this?" |
+| The engine saves measurable time or prevents a material error | Unvalidated — no workflow timing or error-rate data | Time a manual Go/No-Go evaluation with and without engine output for the same tender; record where the engine added information the evaluator did not have and where it was ignored or overridden |
+| The Go/No-Go decision pain is acute enough to drive adoption | Unvalidated — problem existence confirmed by RA-1 evidence, but severity and frequency unconfirmed outside Apex | Interviews with ≥5 decision owners from at least 3 organizations; focus on: how many tenders evaluated per week, time spent per tender, cost of a wrong BID decision, whether any existing tool or process handles this |
+| The development methodology generalizes to a second decision owner's context | Unvalidated — RA cycle built against one company's tenders and verdicts | Run one full RA cycle (collect tenders, record verdicts, benchmark engine) using a second organization's actual tenders. Partial evidence from RA-2.5 multi-profile run; full validation requires real human verdicts from a second source |
