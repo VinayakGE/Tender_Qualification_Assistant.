@@ -2,7 +2,7 @@
 
 **Purpose:** One-page record of what has been demonstrated versus what remains a hypothesis. No narrative. Append only — prior rows are never edited.
 
-Last updated: 2026-06-26 (market validation rows refined: decision-owner framing, specific evidence collection methods)
+Last updated: 2026-06-26 (market validation restructured into three stages: Decision Validation → Workflow Validation → Commercial Validation)
 
 ---
 
@@ -60,7 +60,12 @@ Explicit record of what remains hypothesis.
 | PAT-004 fix improves decision quality | Candidate — 2 observations, no confirmed output-level impact | 1 more observation with output-level impact; or RA-2.5 surfaces ISO miss causing false BID |
 | PAT-005 fix is warranted | Candidate — 1 observation, output masked | 1 more observation with confirmed output-level impact (engine BID / human NO_BID on structurally ineligible tender) |
 | Domain taxonomy is sufficient for commercial use | Unknown — only 8 branches, 1 company sector tested | RA-2.5 multi-profile run; authority-conflation hypothesis verdict |
-| The engine reasoning matches how a decision owner evaluates a tender | Unvalidated — no real Go/No-Go decision owners have reviewed outputs | Observe ≥3 decision owners evaluating a real tender; compare their reasoning sequence and conclusion to the engine's; record points of agreement, disagreement, and questions the engine does not answer. Primary paths: (1) tender consultants working across multiple companies, (2) bid managers in EPC firms. Method: "Can I sit with you while you evaluate one real tender?" — not "Will you buy this?" |
-| The engine saves measurable time or prevents a material error | Unvalidated — no workflow timing or error-rate data | Time a manual Go/No-Go evaluation with and without engine output for the same tender; record where the engine added information the evaluator did not have and where it was ignored or overridden |
-| The Go/No-Go decision pain is acute enough to drive adoption | Unvalidated — problem existence confirmed by RA-1 evidence, but severity and frequency unconfirmed outside Apex | Interviews with ≥5 decision owners from at least 3 organizations; focus on: how many tenders evaluated per week, time spent per tender, cost of a wrong BID decision, whether any existing tool or process handles this |
-| The development methodology generalizes to a second decision owner's context | Unvalidated — RA cycle built against one company's tenders and verdicts | Run one full RA cycle (collect tenders, record verdicts, benchmark engine) using a second organization's actual tenders. Partial evidence from RA-2.5 multi-profile run; full validation requires real human verdicts from a second source |
+| **Stage A — Decision Validation (DV-1)** | | |
+| Engine reasoning sequence matches experienced decision owner reasoning | Unvalidated — no live Go/No-Go decisions observed | Observe 10 real Go/No-Go decisions across ≥3 Decision Laboratories (EPC contractors, tender consultants, proposal managers); compare reasoning sequence step-by-step, not just final output; record divergences without explaining them. Unit of evidence: the decision, not the organization. |
+| Engine surfaces information the evaluator had not already considered | Unvalidated | Record per-decision: did engine output add any signal the human did not have? Was that signal used, ignored, or disputed? |
+| **Stage B — Workflow Validation** | | |
+| Engine fits into how teams actually make the Go/No-Go decision | Unvalidated — Stage A must complete first | Measure: time saved, steps removed, information available earlier in the process, whether evaluators return to the engine without prompting |
+| Reasoning Divergence Rate is low enough to build trust | Unvalidated | After ≥10 live observations: classify each decision as same reasoning / different reasoning same conclusion / different reasoning different conclusion. Target: <20% different-reasoning-different-conclusion |
+| **Stage C — Commercial Validation** | | |
+| Value is large enough that organizations adopt and pay | Unvalidated — Stage B must complete first | Repeat usage without prompting; budget owner engagement; procurement process initiated |
+| Development methodology generalizes to a second decision owner's context | Unvalidated — RA cycle built against one company's tenders and verdicts | Run one full RA cycle using a second organization's actual tenders and their own human verdicts; partial evidence from RA-2.5 multi-profile run |
